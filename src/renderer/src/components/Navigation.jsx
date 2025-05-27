@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { AppBar, Box, Toolbar, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Paper, InputBase, Divider, IconButton, Grid, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import { FaSearch, FaBars, FaCog, FaTimes, FaMinus, FaRegSquare, FaEnvelope, FaUsers, FaUserInjured, FaUserMd, FaLocationArrow, FaFileArchive, FaFileAlt, FaNotesMedical } from "react-icons/fa"
-import { isMaximized, isNotMaximized } from '../function/WindowState'
+import { AppBar, Box, Toolbar, Typography, InputBase, Divider, IconButton, Grid, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+import { FaSearch, FaBars, FaCog, FaTimes, FaMinus, FaRegSquare, FaUsers, FaUserInjured, FaUserMd, FaFileAlt, FaNotesMedical } from "react-icons/fa"
+import { isMaximized } from '../function/WindowState'
 import { HiOutlineSquare2Stack } from 'react-icons/hi2'
 import { LiaTimesSolid } from 'react-icons/lia';
 import icon from '../assets/images/logo.png'
 import { MdDashboard } from 'react-icons/md'
 import { FaLocationDot } from 'react-icons/fa6'
 import { BiLogOut } from 'react-icons/bi'
+import { Link, useLocation } from 'react-router-dom'
+import classe from "../assets/css/Navigation.module.css"
 
 const Navigation = () => {
+
+  let location = useLocation()
 
   /**
    * function used to exit the app
@@ -69,73 +73,98 @@ const Navigation = () => {
         <h3 style={{ color: "#1976d2" }}>Hospital-Management</h3>
       </div>
       <List onClick={toggleDrawer(false)}>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <MdDashboard />
-            </ListItemIcon>
-            <ListItemText primary={"Tableau de bord"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <FaUsers />
-            </ListItemIcon>
-            <ListItemText primary={"Utilisateurs"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <FaUserInjured />
-            </ListItemIcon>
-            <ListItemText primary={"Patients"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <FaUserMd />
-            </ListItemIcon>
-            <ListItemText primary={"Docteurs"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <FaLocationDot />
-            </ListItemIcon>
-            <ListItemText primary={"Rendez vous"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <FaFileAlt />
-            </ListItemIcon>
-            <ListItemText primary={"Dossier médical"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <FaNotesMedical />
-            </ListItemIcon>
-            <ListItemText primary={"Prescription médical"} />
-          </ListItemButton>
-        </ListItem>
+        <Link className={classe.menu} to={'/'}>
+          <ListItem disablePadding className={location.pathname == '/' && classe.menuActive}>
+            <ListItemButton>
+              <ListItemIcon>
+                <MdDashboard />
+              </ListItemIcon>
+              <ListItemText primary={"Tableau de bord"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+
+        <Link className={classe.menu} to={'/users'}>
+          <ListItem disablePadding className={location.pathname == "/users" && classe.menuActive}>
+            <ListItemButton>
+              <ListItemIcon>
+                <FaUsers />
+              </ListItemIcon>
+              <ListItemText primary={"Utilisateurs"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+
+        <Link className={classe.menu} to={'/patients'}>
+          <ListItem disablePadding className={location.pathname == '/patients' && classe.menuActive}>
+            <ListItemButton>
+              <ListItemIcon>
+                <FaUserInjured />
+              </ListItemIcon>
+              <ListItemText primary={"Patients"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+
+        <Link className={classe.menu} to={'/doctor'}>
+          <ListItem disablePadding className={location.pathname == '/doctor' && classe.menuActive}>
+            <ListItemButton>
+              <ListItemIcon>
+                <FaUserMd />
+              </ListItemIcon>
+              <ListItemText primary={"Docteurs"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+
+        <Link className={classe.menu} to={'/appointment'}>
+          <ListItem disablePadding className={location.pathname == '/appointment' && classe.menuActive}>
+            <ListItemButton>
+              <ListItemIcon>
+                <FaLocationDot />
+              </ListItemIcon>
+              <ListItemText primary={"Rendez vous"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+
+        <Link className={classe.menu} to={'/medicalrecord'}>
+          <ListItem disablePadding className={location.pathname == '/medicalrecord' && classe.menuActive}>
+            <ListItemButton>
+              <ListItemIcon>
+                <FaFileAlt />
+              </ListItemIcon>
+              <ListItemText primary={"Dossier médical"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+
+        <Link className={classe.menu} to={'/prescription'}>
+          <ListItem disablePadding className={location.pathname == '/prescription' && classe.menuActive}>
+            <ListItemButton>
+              <ListItemIcon>
+                <FaNotesMedical />
+              </ListItemIcon>
+              <ListItemText primary={"Prescription médical"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
       </List>
+
       <Divider />
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <FaCog />
-            </ListItemIcon>
-            <ListItemText primary={"Parametre"} />
-          </ListItemButton>
-        </ListItem>
+
+      <List onClick={toggleDrawer(false)}>
+        <Link className={classe.menu} to={'/setting'}>
+          <ListItem disablePadding className={location.pathname == '/setting' && classe.menuActive}>
+            <ListItemButton>
+              <ListItemIcon>
+                <FaCog />
+              </ListItemIcon>
+              <ListItemText primary={"Parametre"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
