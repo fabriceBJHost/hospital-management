@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { AppBar, Box, Toolbar, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Paper, InputBase, Divider, IconButton, Grid, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import { FaSearch, FaBars, FaCog, FaTimes, FaMinus, FaRegSquare, FaEnvelope } from "react-icons/fa"
+import { FaSearch, FaBars, FaCog, FaTimes, FaMinus, FaRegSquare, FaEnvelope, FaUsers, FaUserInjured, FaUserMd, FaLocationArrow, FaFileArchive, FaFileAlt, FaNotesMedical } from "react-icons/fa"
 import { isMaximized, isNotMaximized } from '../function/WindowState'
 import { HiOutlineSquare2Stack } from 'react-icons/hi2'
-import { LiaTimesSolid } from 'react-icons/lia'
+import { LiaTimesSolid } from 'react-icons/lia';
+import icon from '../assets/images/logo.png'
+import { MdDashboard } from 'react-icons/md'
+import { FaLocationDot } from 'react-icons/fa6'
+import { BiLogOut } from 'react-icons/bi'
 
 const Navigation = () => {
 
@@ -59,14 +63,66 @@ const Navigation = () => {
   };
 
   const DrawerList = (
-    <Box sx={{ width: 250, pt: 7 }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
+    <Box sx={{ width: 250, pt: 7 }} role="presentation">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+        <img src={icon} width={70} alt="" style={{ border: 'solid 3px #1976d2', borderRadius: "100px", padding: 3, margin: 3 }} />
+        <h3 style={{ color: "#1976d2" }}>Hospital-Management</h3>
+      </div>
+      <List onClick={toggleDrawer(false)}>
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <FaEnvelope />
+              <MdDashboard />
             </ListItemIcon>
-            <ListItemText primary={"Email"} />
+            <ListItemText primary={"Tableau de bord"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <FaUsers />
+            </ListItemIcon>
+            <ListItemText primary={"Utilisateurs"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <FaUserInjured />
+            </ListItemIcon>
+            <ListItemText primary={"Patients"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <FaUserMd />
+            </ListItemIcon>
+            <ListItemText primary={"Docteurs"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <FaLocationDot />
+            </ListItemIcon>
+            <ListItemText primary={"Rendez vous"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <FaFileAlt />
+            </ListItemIcon>
+            <ListItemText primary={"Dossier médical"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <FaNotesMedical />
+            </ListItemIcon>
+            <ListItemText primary={"Prescription médical"} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -78,6 +134,14 @@ const Navigation = () => {
               <FaCog />
             </ListItemIcon>
             <ListItemText primary={"Parametre"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <BiLogOut />
+            </ListItemIcon>
+            <ListItemText primary={"Déconnection"} />
           </ListItemButton>
         </ListItem>
       </List>
