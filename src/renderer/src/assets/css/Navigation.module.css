@@ -6,3 +6,23 @@
 .menuActive {
   background: #56aaff;
 }
+.appbar{
+  border-bottom: #56aaff solid 1px;
+}
+.inputSearch {
+  border: #56aaff solid 1px;;
+}
+.icon{
+  color: #0080ff;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+.drawer {
+  border-right: #56aaff solid 1px;
+  height: 100vh;
+}
+.inputSearchField::placeholder {
+  font-style: italic;
+  color: white;
+}

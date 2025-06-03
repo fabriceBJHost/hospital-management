@@ -42,6 +42,9 @@
 ul {
   list-style: none;
 }
+html {
+  background: rgb(230, 230, 230);
+}
 
 /* body {
   min-height: 100vh;

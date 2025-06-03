@@ -8,7 +8,7 @@ const DefaultLayout = () => {
     <>
       <Navigation />
       <Container maxWidth="xl">
-        <Box sx={{ mt: 6 }}>
+        <Box sx={{ mt: 6, paddingTop: 3 }}>
           <Outlet />
         </Box>
       </Container>

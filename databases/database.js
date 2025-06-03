@@ -1,7 +1,8 @@
 const sqlite = require('better-sqlite3');
 const path = require('path');
+const bcrypt = require('bcryptjs');
 
-const database = new sqlite(path.resolve(__dirname, 'hospital.db'));
+const database = new sqlite('./hospital.db');
 
 /**
  * create patient table if not exist in database
@@ -120,6 +121,19 @@ const createPrescriptionTableQuery = `
 
 `;
 database.prepare(createPrescriptionTableQuery).run()
+
+// ------------------------------------------------- execute function --------------------------------------------
+
+// Insert a default admin user only if the users table is empty
+const insertIfTableEmptyQuery = `
+  INSERT INTO users (username, email, password, roles, images)
+  SELECT 'admin', 'admin@example.com', ?, 'admin', '/assets/images/admin.png'
+  WHERE (SELECT COUNT(*) FROM users) = 0;
+`
+
+// Hash the password '1234567890' before storing
+const hashedPassword = bcrypt.hashSync('1234567890', 10)
+database.prepare(insertIfTableEmptyQuery).run(hashedPassword)
 
 module.exports = {
   database

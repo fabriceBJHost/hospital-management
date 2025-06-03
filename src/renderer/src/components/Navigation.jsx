@@ -67,7 +67,7 @@ const Navigation = () => {
   };
 
   const DrawerList = (
-    <Box sx={{ width: 250, pt: 7 }} role="presentation">
+    <Box sx={{ width: 250, pt: 7 }} role="presentation" className={classe.drawer}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
         <img src={icon} width={70} alt="" style={{ border: 'solid 3px #1976d2', borderRadius: "100px", padding: 3, margin: 3 }} />
         <h3 style={{ color: "#1976d2" }}>Hospital-Management</h3>
@@ -77,7 +77,7 @@ const Navigation = () => {
           <ListItem disablePadding className={location.pathname == '/' && classe.menuActive}>
             <ListItemButton>
               <ListItemIcon>
-                <MdDashboard />
+                <MdDashboard className={classe.icon} />
               </ListItemIcon>
               <ListItemText primary={"Tableau de bord"} />
             </ListItemButton>
@@ -88,7 +88,7 @@ const Navigation = () => {
           <ListItem disablePadding className={location.pathname == "/users" && classe.menuActive}>
             <ListItemButton>
               <ListItemIcon>
-                <FaUsers />
+                <FaUsers className={classe.icon} />
               </ListItemIcon>
               <ListItemText primary={"Utilisateurs"} />
             </ListItemButton>
@@ -99,7 +99,7 @@ const Navigation = () => {
           <ListItem disablePadding className={location.pathname == '/patients' && classe.menuActive}>
             <ListItemButton>
               <ListItemIcon>
-                <FaUserInjured />
+                <FaUserInjured className={classe.icon} />
               </ListItemIcon>
               <ListItemText primary={"Patients"} />
             </ListItemButton>
@@ -110,7 +110,7 @@ const Navigation = () => {
           <ListItem disablePadding className={location.pathname == '/doctor' && classe.menuActive}>
             <ListItemButton>
               <ListItemIcon>
-                <FaUserMd />
+                <FaUserMd className={classe.icon} />
               </ListItemIcon>
               <ListItemText primary={"Docteurs"} />
             </ListItemButton>
@@ -121,7 +121,7 @@ const Navigation = () => {
           <ListItem disablePadding className={location.pathname == '/appointment' && classe.menuActive}>
             <ListItemButton>
               <ListItemIcon>
-                <FaLocationDot />
+                <FaLocationDot className={classe.icon} />
               </ListItemIcon>
               <ListItemText primary={"Rendez vous"} />
             </ListItemButton>
@@ -132,7 +132,7 @@ const Navigation = () => {
           <ListItem disablePadding className={location.pathname == '/medicalrecord' && classe.menuActive}>
             <ListItemButton>
               <ListItemIcon>
-                <FaFileAlt />
+                <FaFileAlt className={classe.icon} />
               </ListItemIcon>
               <ListItemText primary={"Dossier médical"} />
             </ListItemButton>
@@ -143,7 +143,7 @@ const Navigation = () => {
           <ListItem disablePadding className={location.pathname == '/prescription' && classe.menuActive}>
             <ListItemButton>
               <ListItemIcon>
-                <FaNotesMedical />
+                <FaNotesMedical className={classe.icon} />
               </ListItemIcon>
               <ListItemText primary={"Prescription médical"} />
             </ListItemButton>
@@ -158,7 +158,7 @@ const Navigation = () => {
           <ListItem disablePadding className={location.pathname == '/setting' && classe.menuActive}>
             <ListItemButton>
               <ListItemIcon>
-                <FaCog />
+                <FaCog className={classe.icon} />
               </ListItemIcon>
               <ListItemText primary={"Parametre"} />
             </ListItemButton>
@@ -168,7 +168,7 @@ const Navigation = () => {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <BiLogOut />
+              <BiLogOut className={classe.icon} />
             </ListItemIcon>
             <ListItemText primary={"Déconnection"} />
           </ListItemButton>
@@ -182,6 +182,7 @@ const Navigation = () => {
       position='fixed'
       color='inherit'
       sx={{ zIndex: 99999 }}
+      className={classe.appbar}
     >
       <Drawer open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
@@ -205,10 +206,12 @@ const Navigation = () => {
               Hospital Management
             </Typography>
           </Grid>
-          <Grid container alignItems={'center'} justifyContent={'space-between'} sx={{ width: "30%", backgroundColor: '#cfcaca96', borderRadius: 2, height: "37px" }}>
+          <Grid container alignItems={'center'} justifyContent={'space-between'} sx={{ width: "30%", backgroundColor: '#cfcaca96', borderRadius: 2, height: "37px" }} className={classe.inputSearch}>
             <InputBase
               sx={{ ml: 1, flex: 1, p: 0 }}
               placeholder="Recherche..."
+              type='search'
+              className={classe.inputSearchField}
             />
             <FaSearch style={{ p: '10px', width: '40px' }} />
           </Grid>
