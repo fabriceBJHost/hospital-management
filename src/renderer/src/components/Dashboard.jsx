@@ -70,7 +70,6 @@ const Dashboard = () => {
 
   return (
     <>
-      <HeaderTitle title={'Tableau de bord'} />
       <Container maxWidth="xl">
         <Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
           {/* patient statistique */}

@@ -38,12 +38,33 @@
   margin: 0;
   font-weight: normal;
 }
+/* index.css or global.css */
+
+* {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 
 ul {
   list-style: none;
 }
 html {
-  background: rgb(230, 230, 230);
+  background: rgb(235, 227, 227);
 }
 
 /* body {

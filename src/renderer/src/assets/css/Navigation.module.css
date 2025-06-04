@@ -5,24 +5,104 @@
 
 .menuActive {
   background: #56aaff;
+  color: white;
 }
-.appbar{
+
+.appbar {
   border-bottom: #56aaff solid 1px;
 }
-.inputSearch {
-  border: #56aaff solid 1px;;
+
+.divider {
+  color: #56aaff;
+  border-bottom: solid .1px #56aaff!important;
 }
-.icon{
+
+.inputSearch {
+  border: #56aaff solid 1px;
+  ;
+}
+
+.icon {
   color: #0080ff;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
 }
+
+.iconActive {
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+.drawerTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: start;
+  font-size: 12px;
+  color: #56aaff;
+  transition: all 0.3s ease;
+  font-weight: bolder;
+}
+
 .drawer {
-  border-right: #56aaff solid 1px;
+  border-right: solid 1px #56aaff!important;
   height: 100vh;
 }
+
+.drawerHeader {
+  border-right: solid 1px #56aaff!important;
+}
+
 .inputSearchField::placeholder {
   font-style: italic;
   color: white;
+}
+
+.ListItemButton {
+  min-height: 48px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+/* When open is true */
+.ListItemButton.open {
+  justify-content: initial;
+}
+
+/* When open is false */
+.ListItemButton.closed {
+  justify-content: initial;
+}
+
+/* Icon when open */
+.iconOpen {
+  margin-right: 0;
+  /* 3 * 8px */
+}
+
+/* Icon when closed */
+.iconClosed {
+  margin-right: 0;
+}
+
+/* Text when open */
+.textVisible {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Text when closed */
+.textHidden {
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
