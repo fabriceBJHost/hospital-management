@@ -15,7 +15,7 @@ import {
 import { FaFileAlt, FaNotesMedical, FaUserInjured, FaUserMd } from 'react-icons/fa';
 import StatCard from './StatCard';
 import AppointmentStatusCard from './AppointmentStatutCard';
-import HeaderTitle from './templates/HeaderTitle';
+import classe from '../assets/css/Dashboard.module.css';
 
 ChartJS.register(
   CategoryScale,
@@ -71,9 +71,9 @@ const Dashboard = () => {
   return (
     <>
       <Container maxWidth="xl">
-        <Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
+        <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} className={classe.statGridContainer}>
           {/* patient statistique */}
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid size={4} className={classe.statGridItem}>
             <StatCard
               title="Patients"
               value={120}
@@ -84,7 +84,7 @@ const Dashboard = () => {
           </Grid>
 
           {/* docteur statistique */}
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid size={4} className={classe.statGridItem}>
             <StatCard
               title="Docteur"
               value={15}
@@ -93,18 +93,8 @@ const Dashboard = () => {
             />
           </Grid>
 
-          {/* rendezvous statistique */}
-          <Grid item xs={12} sm={6} md={4}>
-            <AppointmentStatusCard
-              total={85}
-              cancelled={10}
-              completed={25}
-              scheduled={50}
-            />
-          </Grid>
-
           {/* dossier medical */}
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid size={4} className={classe.statGridItem}>
             <StatCard
               title="Dossier Médical"
               value={60}
@@ -115,13 +105,23 @@ const Dashboard = () => {
           </Grid>
 
           {/* prescriptions */}
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid size={4} className={classe.statGridItem}>
             <StatCard
               title="Prescriptions"
               value={40}
               icon={<FaNotesMedical size={24} />}
               color="#e53935"
               trend={{ value: 3, isNeutral: true, label: "from last week" }}
+            />
+          </Grid>
+
+          {/* rendezvous statistique */}
+          <Grid size={4} className={classe.statGridItem}>
+            <AppointmentStatusCard
+              total={85}
+              cancelled={10}
+              completed={25}
+              scheduled={50}
             />
           </Grid>
         </Grid>

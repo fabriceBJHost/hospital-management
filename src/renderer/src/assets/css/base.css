@@ -59,6 +59,17 @@
   background: transparent;
 }
 
+/* Drag area */
+.drag {
+  -webkit-app-region: drag;
+}
+
+/* Don't drag these (inputs, buttons) */
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+
 
 ul {
   list-style: none;

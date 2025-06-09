@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { styled, useTheme } from '@mui/material/styles';
-import {Box, MuiDrawer, MuiAppBar, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
-import { FaChevronLeft, FaChevronRight, FaBars, FaUsers, FaUserInjured, FaUserMd, FaFileAlt, FaNotesMedical, FaCog, FaMinus, FaRegSquare, FaSearch } from 'react-icons/fa';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import MuiAppBar from '@mui/material/AppBar';
+import MuiDrawer from '@mui/material/Drawer';
+import {Box, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
+import { FaChevronLeft, FaChevronRight, FaBars, FaUsers, FaUserInjured, FaUserMd, FaFileAlt, FaNotesMedical, FaCog, FaMinus, FaRegSquare, FaSearch } from 'react-icons/fa'
 import classe from "../assets/css/Navigation.module.css"
 import { Link, useLocation } from 'react-router-dom'
 import { MdDashboard } from 'react-icons/md';
@@ -159,11 +157,12 @@ const NavigationTest = ({ childrens }) => {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      {/* <CssBaseline /> */}
+      <AppBar position="fixed" open={open} className="drag">
         <Toolbar variant='dense'>
           <IconButton
             color="inherit"
+            className="no-drag"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
@@ -192,7 +191,7 @@ const NavigationTest = ({ childrens }) => {
               <FaSearch style={{ p: '10px', width: '40px' }} />
             </Grid>
 
-            <Grid>
+            <Grid className="no-drag">
               <IconButton edge="start" color='inherit' aria-label='menu' sx={{ mr: 2 }} onClick={minimize}>
                 <FaMinus />
               </IconButton>
@@ -336,7 +335,7 @@ const NavigationTest = ({ childrens }) => {
           </ListItem>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, minHeight: '100vh', overflow: 'auto' }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, minHeight: '100vh', overflow: 'auto' }} classes={classe.cssBase}>
         <DrawerHeader />
         {childrens}
       </Box>
