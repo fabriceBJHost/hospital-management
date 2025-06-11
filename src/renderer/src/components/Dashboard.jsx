@@ -70,7 +70,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
         <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} className={classe.statGridContainer}>
           {/* patient statistique */}
           <Grid size={4} className={classe.statGridItem}>
@@ -128,7 +128,25 @@ const Dashboard = () => {
 
 
         <Grid container spacing={4} style={{ marginTop: 20 }}>
-          <Grid item xs={12} md={6}>
+          <Grid size={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6">Prescriptions par Categorie</Typography>
+                <Bar data={prescriptionData} />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid size={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6">Nouvelles tendances des patients</Typography>
+                <Line data={patientTrendData} />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid size={6}>
             <Card>
               <CardContent>
                 <Typography variant="h6">Appointment Status</Typography>
@@ -136,25 +154,8 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">New Patient Trends</Typography>
-                <Line data={patientTrendData} />
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Prescriptions by Category</Typography>
-                <Bar data={prescriptionData} />
-              </CardContent>
-            </Card>
-          </Grid>
         </Grid>
+
       </Container>
     </>
   );

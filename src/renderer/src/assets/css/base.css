@@ -76,6 +76,7 @@ ul {
 }
 html {
   background: rgb(235, 227, 227);
+  /* overflow: hidden; */
 }
 
 /* body {

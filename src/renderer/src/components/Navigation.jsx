@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { styled, useTheme } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
-import {Box, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
+import { Box, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { FaChevronLeft, FaChevronRight, FaBars, FaUsers, FaUserInjured, FaUserMd, FaFileAlt, FaNotesMedical, FaCog, FaMinus, FaRegSquare, FaSearch } from 'react-icons/fa'
 import classe from "../assets/css/Navigation.module.css"
 import { Link, useLocation } from 'react-router-dom'
@@ -156,9 +156,9 @@ const NavigationTest = ({ childrens }) => {
   }, [])
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: 'rgba(214, 214, 214, 0.17)' }}>
       {/* <CssBaseline /> */}
-      <AppBar position="fixed" open={open} className="drag">
+      <AppBar position="fixed" open={open} className="drag" sx={{ overflow: 'hidden' }}>
         <Toolbar variant='dense'>
           <IconButton
             color="inherit"
@@ -177,7 +177,7 @@ const NavigationTest = ({ childrens }) => {
           </IconButton>
           <Grid container spacing={2} alignItems={'center'} justifyContent={'space-between'} sx={{ width: "100%" }}>
             <Grid>
-              <Typography variant='h6' sx={{textTransform: 'capitalize'}}>
+              <Typography variant='h6' sx={{ textTransform: 'capitalize' }}>
                 {location.pathname.replace('/', '') === '' ? 'Tableau de bord' : location.pathname.replace('/', '')}
               </Typography>
             </Grid>
@@ -186,7 +186,7 @@ const NavigationTest = ({ childrens }) => {
                 sx={{ ml: 1, flex: 1, p: 0 }}
                 placeholder="Recherche..."
                 type='search'
-                className={classe.inputSearchField}
+                className={classe.inputSearchField + ' no-drag'}
               />
               <FaSearch style={{ p: '10px', width: '40px' }} />
             </Grid>
@@ -218,7 +218,7 @@ const NavigationTest = ({ childrens }) => {
           {
             open &&
             <Typography className={classe.drawerTitle} component="div" variant='p'>
-              <Avatar sx={{ width: 45, height: 45, border:"solid 1px #56aaff" }} alt="logo of software" src={icon} /> Hospital Management
+              <Avatar sx={{ width: 45, height: 45, border: "solid 1px #56aaff" }} alt="logo of software" src={icon} /> Hospital Management
             </Typography>
           }
           <IconButton onClick={handleDrawerClose}>
@@ -335,9 +335,19 @@ const NavigationTest = ({ childrens }) => {
           </ListItem>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, minHeight: '100vh', overflow: 'auto' }} classes={classe.cssBase}>
+      <Box component="main"
+        sx={{
+          flexGrow: 1,
+          p: 1,
+          mt: '48px', // height of AppBar (toolbar dense is usually 48px)
+          overflowY: 'auto',
+          height: 'calc(100vh - 48px)', // ensure it scrolls only in the space below AppBar
+        }}>
         <DrawerHeader />
-        {childrens}
+        <Box >
+          {childrens}
+        </Box>
+        <DrawerHeader />
       </Box>
     </Box >
   );

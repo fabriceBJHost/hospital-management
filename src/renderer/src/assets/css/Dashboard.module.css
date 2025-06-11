@@ -1,20 +1,3 @@
-/* .statGridContainer {
-  display: flex;
-  flex-direction: column; /* stack items vertically
-  gap: 10px;
-  border-radius: 10px;
-  width: 100%;
-  padding: 10px;
-  background-color: rgb(255, 255, 255);
-}
-
-.statGridItem {
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  background-color: rgb(240, 240, 240);
-} */
-
 .statGridContainer {
   display: flex;
   flex-wrap: wrap;

@@ -32,8 +32,7 @@
   justify-content: center;
 }
 .cssBase {
-  /* background-color: rgb(235, 227, 227); */
-  background: rgb(0, 0, 0);
+  flex-grow: 1;
 }
 
 .iconActive {
