@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Typography, Grid, Container, Box } from '@mui/material';
+import { Card, CardContent, Typography, Container, Box } from '@mui/material';
 import { Bar, Pie, Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import Grid from '@mui/material/Grid';
 import { FaFileAlt, FaNotesMedical, FaUserInjured, FaUserMd } from 'react-icons/fa';
 import StatCard from './StatCard';
 import AppointmentStatusCard from './AppointmentStatutCard';
@@ -71,9 +72,9 @@ const Dashboard = () => {
   return (
     <>
       <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
-        <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} className={classe.statGridContainer}>
+        <Grid container spacing={1} className={classe.statGridContainer}>
           {/* patient statistique */}
-          <Grid size={4} className={classe.statGridItem}>
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4 }} className={classe.statGridItem}>
             <StatCard
               title="Patients"
               value={120}
@@ -84,7 +85,7 @@ const Dashboard = () => {
           </Grid>
 
           {/* docteur statistique */}
-          <Grid size={4} className={classe.statGridItem}>
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4 }} className={classe.statGridItem}>
             <StatCard
               title="Docteur"
               value={15}
@@ -94,7 +95,7 @@ const Dashboard = () => {
           </Grid>
 
           {/* dossier medical */}
-          <Grid size={4} className={classe.statGridItem}>
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4 }} className={classe.statGridItem}>
             <StatCard
               title="Dossier Médical"
               value={60}
@@ -105,7 +106,7 @@ const Dashboard = () => {
           </Grid>
 
           {/* prescriptions */}
-          <Grid size={4} className={classe.statGridItem}>
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4 }} className={classe.statGridItem}>
             <StatCard
               title="Prescriptions"
               value={40}
@@ -116,7 +117,7 @@ const Dashboard = () => {
           </Grid>
 
           {/* rendezvous statistique */}
-          <Grid size={4} className={classe.statGridItem}>
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4 }} className={classe.statGridItem}>
             <AppointmentStatusCard
               total={85}
               cancelled={10}
@@ -128,7 +129,7 @@ const Dashboard = () => {
 
 
         <Grid container spacing={4} style={{ marginTop: 20 }}>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6">Prescriptions par Categorie</Typography>
@@ -137,7 +138,7 @@ const Dashboard = () => {
             </Card>
           </Grid>
 
-          <Grid size={6}>
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6">Nouvelles tendances des patients</Typography>
@@ -146,8 +147,8 @@ const Dashboard = () => {
             </Card>
           </Grid>
 
-          <Grid size={6}>
-            <Card>
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
+            <Card style={{ height: '100%' }}>
               <CardContent>
                 <Typography variant="h6">Appointment Status</Typography>
                 <Pie data={appointmentStatusData} />
