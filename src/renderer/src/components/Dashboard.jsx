@@ -197,18 +197,7 @@ const Dashboard = () => {
             </Card>
           </Grid>
 
-          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
-            <Card style={{ height: '100%' }}>
-              <CardContent>
-                <Typography variant="h6">Appointment Status</Typography>
-                <div className={classe.pieChartContainer}>
-                  <Pie data={appointmentStatusData} />
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6 }}>
+          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 7 }}>
             <Card style={{ height: '100%' }}>
               <CardContent>
                 <Typography variant="h6">Les 10 dernier rendez vous</Typography>
@@ -225,6 +214,7 @@ const Dashboard = () => {
                       columns={columns}
                       initialState={{ pagination: { paginationModel } }}
                       pageSizeOptions={[5, 10]}
+                      disableRowSelectionOnClick
                       sx={{
                         border: "solid 1px #e0e0e0",
                         width: 'auto', // Ensures the DataGrid takes full width
@@ -243,6 +233,17 @@ const Dashboard = () => {
                     />
                   </div>
                 </ThemeProvider>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 5 }}>
+            <Card style={{ height: '100%' }}>
+              <CardContent>
+                <Typography variant="h6">Status des rendez vous</Typography>
+                <div className={classe.pieChartContainer}>
+                  <Pie data={appointmentStatusData} />
+                </div>
               </CardContent>
             </Card>
           </Grid>

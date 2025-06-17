@@ -12,10 +12,11 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
 
-    // contextBridge.executeInMainWorld('users', {
-    //   // getUser: getUser(),
-    //   // postUser: (userData) => ipcRenderer.invoke('post-user', userData)
-    // })
+    contextBridge.exposeInMainWorld('session', {
+      setSession: (sessionData) => ipcRenderer.invoke('set-session', sessionData),
+      getSession: () => ipcRenderer.invoke('get-session'),
+      clearSession: () => ipcRenderer.invoke('clear-session')
+    })
 
     contextBridge.exposeInMainWorld('navigations', {
       exit: (userData) => ipcRenderer.invoke('exit', userData),

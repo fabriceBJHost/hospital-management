@@ -59,7 +59,7 @@ const createAppointmentTableQuery = `
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (patient_id) REFERENCES patients(id),
-    FOREIGN KEY (doctor_id) REFERENCES doctors(id),
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id)
   );
 
 `
@@ -79,7 +79,7 @@ const createMedicalRecordTableQuery = `
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (patient_id) REFERENCES patients(id),
-    FOREIGN KEY (doctor_id) REFERENCES doctors(id),
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id)
   );
 
 `
@@ -126,8 +126,8 @@ database.prepare(createPrescriptionTableQuery).run()
 
 // Insert a default admin user only if the users table is empty
 const insertIfTableEmptyQuery = `
-  INSERT INTO users (username, email, password, roles, images)
-  SELECT 'admin', 'admin@example.com', ?, 'admin', '/assets/images/admin.png'
+  INSERT INTO users (username, password, role, images)
+  SELECT 'admin', ?, 'admin', '/assets/images/admin.png'
   WHERE (SELECT COUNT(*) FROM users) = 0;
 `
 

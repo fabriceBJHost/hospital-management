@@ -11,6 +11,7 @@ import Appointment from '../components/Appointment'
 import MedicalRecord from '../components/MedicalRecord'
 import Prescription from '../components/Prescription'
 import Setting from '../components/Setting'
+import Notification from '../components/Notification'
 
 /**
  * function who return all view
@@ -51,6 +52,10 @@ const Router = createHashRouter([
       {
         path: '/setting',
         element: <Setting />
+      },
+      {
+        path: '/notification',
+        element: <Notification />
       }
     ]
   },

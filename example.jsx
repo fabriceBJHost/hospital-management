@@ -86,3 +86,22 @@ const imgDir = path.join(__dirname, '../src/assets/images')
 if (!fs.existsSync(imgDir)) {
   fs.mkdirSync(imgDir, { recursive: true })
 }
+
+// main.js
+const Store = require('electron-store');
+const store = new Store();
+
+// Save session after successful login
+ipcMain.handle('set-session', (event, sessionData) => {
+  store.set('session', sessionData); // { role: 'admin', token: '...', etc }
+});
+
+// Get session anywhere
+ipcMain.handle('get-session', () => {
+  return store.get('session');
+});
+
+// Clear session on logout
+ipcMain.handle('clear-session', () => {
+  store.delete('session');
+});

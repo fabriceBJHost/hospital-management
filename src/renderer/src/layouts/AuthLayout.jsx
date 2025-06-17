@@ -6,7 +6,7 @@ import { Box, Container } from '@mui/material'
 const AuthLayout = () => {
   return (
     <>
-      <Navigation />
+      {/* <Navigation /> */}
       <Container maxWidth="xl">
         <Box sx={{ mt: 6 }}>
           <Outlet />

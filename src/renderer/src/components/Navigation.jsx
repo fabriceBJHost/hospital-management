@@ -27,7 +27,8 @@ import {
   FaCog,
   FaMinus,
   FaRegSquare,
-  FaSearch
+  FaSearch,
+  FaBell
 } from 'react-icons/fa'
 import classe from '../assets/css/Navigation.module.css'
 import { Link, useLocation } from 'react-router-dom'
@@ -478,6 +479,28 @@ const NavigationTest = ({ childrens }) => {
                 </ListItemIcon>
                 <ListItemText
                   primary={'Parametre'}
+                  className={open ? classe.textVisible : classe.textHidden}
+                />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+
+          <Link className={classe.menu} to={'/notification'}>
+            <ListItem
+              disablePadding
+              className={location.pathname == '/notification' && classe.menuActive}
+              sx={{ display: 'block' }}
+            >
+              <ListItemButton
+                className={`${classe.ListItemButton} ${open ? classe.open : classe.closed}`}
+              >
+                <ListItemIcon className={open ? classe.iconOpen : classe.iconClosed}>
+                  <FaBell
+                    className={location.pathname == '/notification' ? classe.iconActive : classe.icon}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  primary={'Notification'}
                   className={open ? classe.textVisible : classe.textHidden}
                 />
               </ListItemButton>
