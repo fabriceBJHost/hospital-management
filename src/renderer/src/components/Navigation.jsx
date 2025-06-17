@@ -509,9 +509,7 @@ const NavigationTest = ({ childrens }) => {
           height: 'calc(100vh - 48px)' // ensure it scrolls only in the space below AppBar
         }}
       >
-        <DrawerHeader />
-        <Box>{childrens}</Box>
-        <DrawerHeader />
+        {childrens}
       </Box>
     </Box>
   )
