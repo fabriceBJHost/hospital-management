@@ -1,53 +1,54 @@
-const fs = require('fs');
-const path = require('path');
-const bcryptjs = require('bcryptjs');
-const Database = require('better-sqlite3');
+const fs = require('fs')
+const path = require('path')
+const bcryptjs = require('bcryptjs')
+const Database = require('better-sqlite3')
 
 // SQLite database connection
-const db = new Database('your-database.sqlite');
+const db = new Database('your-database.sqlite')
 
 // Function to insert user
 async function insertUser({ username, password, role, image }) {
-  const saltRounds = 10;
+  const saltRounds = 10
 
   try {
     // 1. Hash password
-    const hashedPassword = await bcryptjs.hash(password, saltRounds);
+    const hashedPassword = await bcryptjs.hash(password, saltRounds)
 
     // 2. Define image save path
-    const imageName = `${Date.now()}-${image.name}`;
-    const destPath = path.join(__dirname, '../src/assets/images', imageName);
+    const imageName = `${Date.now()}-${image.name}`
+    const destPath = path.join(__dirname, '../src/assets/images', imageName)
 
     // 3. Save image buffer to destPath
-    const imageBuffer = Buffer.from(image.buffer); // Ensure image.buffer is ArrayBuffer or Buffer
-    fs.writeFileSync(destPath, imageBuffer);
+    const imageBuffer = Buffer.from(image.buffer) // Ensure image.buffer is ArrayBuffer or Buffer
+    fs.writeFileSync(destPath, imageBuffer)
 
     // 4. Save user data to database
-    const relativeImagePath = `src/assets/images/${imageName}`;
-    const query = db.prepare('INSERT INTO users (username, password, role, image_path) VALUES (?, ?, ?, ?)');
-    const result = query.run(username, hashedPassword, role, relativeImagePath);
+    const relativeImagePath = `src/assets/images/${imageName}`
+    const query = db.prepare(
+      'INSERT INTO users (username, password, role, image_path) VALUES (?, ?, ?, ?)'
+    )
+    const result = query.run(username, hashedPassword, role, relativeImagePath)
 
-    return { success: true, id: result.lastInsertRowid };
+    return { success: true, id: result.lastInsertRowid }
   } catch (error) {
-    return { success: false, error: error.message };
+    return { success: false, error: error.message }
   }
 }
 
-module.exports = { insertUser };
-
+module.exports = { insertUser }
 
 // preload.js
 contextBridge.exposeInMainWorld('post', {
   insertUser: (formData) => {
-    const entries = {};
+    const entries = {}
     formData.forEach((value, key) => {
-      entries[key] = value;
-    });
+      entries[key] = value
+    })
 
-    const file = entries.image;
+    const file = entries.image
 
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = () => {
         const payload = {
           username: entries.username,
@@ -57,34 +58,31 @@ contextBridge.exposeInMainWorld('post', {
             name: file.name,
             buffer: Array.from(new Uint8Array(reader.result)) // to send via IPC
           }
-        };
+        }
 
-        window.electron.ipcRenderer.invoke('insert-user', payload)
-          .then(resolve)
-          .catch(reject);
-      };
+        window.electron.ipcRenderer.invoke('insert-user', payload).then(resolve).catch(reject)
+      }
 
-      reader.onerror = reject;
-      reader.readAsArrayBuffer(file);
-    });
+      reader.onerror = reject
+      reader.readAsArrayBuffer(file)
+    })
   }
-});
+})
 
-
-const { ipcMain } = require('electron');
-const { insertUser } = require('./model');
+const { ipcMain } = require('electron')
+const { insertUser } = require('./model')
 
 ipcMain.handle('insert-user', async (event, userData) => {
   // Convert image.buffer back from Array to Buffer
   if (userData.image && Array.isArray(userData.image.buffer)) {
-    userData.image.buffer = Buffer.from(userData.image.buffer);
+    userData.image.buffer = Buffer.from(userData.image.buffer)
   }
 
-  const result = await insertUser(userData);
-  return result;
-});
+  const result = await insertUser(userData)
+  return result
+})
 
-const imgDir = path.join(__dirname, '../src/assets/images');
+const imgDir = path.join(__dirname, '../src/assets/images')
 if (!fs.existsSync(imgDir)) {
-  fs.mkdirSync(imgDir, { recursive: true });
+  fs.mkdirSync(imgDir, { recursive: true })
 }

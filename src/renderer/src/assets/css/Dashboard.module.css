@@ -16,21 +16,10 @@
   box-sizing: border-box;
 }
 
-
-
-/* Responsive fallback for medium screens (2 per row) */
-@media (max-width: 1250px) {
-  .statGridItem {
-    flex: 1 1 50%;
-    max-width: 100%;
-  }
-
-  .statGridItem {
-    /* flex: 1; */
-    padding: 10px;
-    max-width: 100%;
-    border-radius: 10px;
-    background-color: rgb(240, 240, 240);
-    box-sizing: border-box;
-  }
+.pieChartContainer {
+  width: 100%;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

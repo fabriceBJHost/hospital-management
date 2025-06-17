@@ -3,7 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
-let mainWindow;
+let mainWindow
 
 function createWindow() {
   // Create the browser window.
@@ -20,7 +20,7 @@ function createWindow() {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       nodeIntegration: true,
-      contextIsolation: true,
+      contextIsolation: true
     }
   })
 
@@ -96,7 +96,7 @@ ipcMain.handle('exit', async (event, userData) => {
   if (userData) {
     app.quit()
   }
-});
+})
 
 /**
  * function to minimize app
@@ -105,7 +105,7 @@ ipcMain.handle('minimize', async (event, userData) => {
   if (userData) {
     mainWindow.minimize()
   }
-});
+})
 
 /**
  * function to maximize app
@@ -114,7 +114,7 @@ ipcMain.handle('maximize', async (event, userData) => {
   if (userData) {
     mainWindow.maximize()
   }
-});
+})
 
 /**
  * function to unmaximize
@@ -123,4 +123,4 @@ ipcMain.handle('unmaximize', async (event, userData) => {
   if (userData) {
     mainWindow.unmaximize()
   }
-});
+})

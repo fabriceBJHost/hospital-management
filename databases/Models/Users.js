@@ -1,5 +1,5 @@
-const { database } = require('../database');
-const bcryptjs = require('bcryptjs');
+const { database } = require('../database')
+const bcryptjs = require('bcryptjs')
 
 /**
  * Insère un nouvel utilisateur dans la base de données après avoir haché le mot de passe.
@@ -13,18 +13,17 @@ const bcryptjs = require('bcryptjs');
  * ou une erreur en cas d'échec.
  */
 const register = async (username, password, role) => {
-
-  const query = database.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)');
+  const query = database.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)')
   const saltRounds = 10
 
   try {
-    let hashedPassword = await bcryptjs.hash(password, saltRounds);
+    let hashedPassword = await bcryptjs.hash(password, saltRounds)
 
-    let response = query.run(username, hashedPassword, role);
+    let response = query.run(username, hashedPassword, role)
 
     return response
   } catch (error) {
-    return error;
+    return error
   }
 }
 
@@ -38,25 +37,21 @@ const login = async (username, password) => {
   const query = database.prepare('SELECT * FROM users WHERE LOWER(username) = ?')
 
   try {
-    let user = await query.get(username.toLowerCase());
+    let user = await query.get(username.toLowerCase())
 
     if (user) {
-      let isPasswordValid = bcryptjs.compare(password, user.password);
+      let isPasswordValid = bcryptjs.compare(password, user.password)
 
       if (isPasswordValid) {
-
-        return user;
+        return user
       } else {
-
-        return {errorPassword: 'Mot de passe ne correspond pas'}
+        return { errorPassword: 'Mot de passe ne correspond pas' }
       }
     } else {
-
-      return {errorUsername: 'Utilisateur non trouver'}
+      return { errorUsername: 'Utilisateur non trouver' }
     }
   } catch (error) {
-
-    return error;
+    return error
   }
 }
 
@@ -65,15 +60,14 @@ const login = async (username, password) => {
  * @returns {Promise}
  */
 const getAll = () => {
-  const query = database.prepare('SELECT * FROM users');
+  const query = database.prepare('SELECT * FROM users')
 
   try {
-    let response = query.all();
+    let response = query.all()
 
     return response
   } catch (error) {
-
-    return error;
+    return error
   }
 }
 
@@ -83,15 +77,14 @@ const getAll = () => {
  * @returns
  */
 const deleteUsers = async (id) => {
-  const query = database.prepare('DELETE FROM users WHERE id = ?');
+  const query = database.prepare('DELETE FROM users WHERE id = ?')
 
   try {
-    let response = await query.run(id);
+    let response = await query.run(id)
 
-    return response;
+    return response
   } catch (error) {
-
-    return error;
+    return error
   }
 }
 
@@ -99,5 +92,5 @@ module.exports = {
   register,
   login,
   getAll,
-  deleteUsers,
+  deleteUsers
 }

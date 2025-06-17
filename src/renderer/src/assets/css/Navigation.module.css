@@ -14,12 +14,11 @@
 
 .divider {
   color: #56aaff;
-  border-bottom: solid .1px #56aaff!important;
+  border-bottom: solid 0.1px #56aaff !important;
 }
 
 .inputSearch {
   border: #56aaff solid 1px;
-  ;
 }
 
 .icon {
@@ -56,12 +55,12 @@
 }
 
 .drawer {
-  border-right: solid 1px #56aaff!important;
+  border-right: solid 1px #56aaff !important;
   height: 100vh;
 }
 
 .drawerHeader {
-  border-right: solid 1px #56aaff!important;
+  border-right: solid 1px #56aaff !important;
 }
 
 .inputSearchField::placeholder {

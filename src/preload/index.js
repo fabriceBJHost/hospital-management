@@ -21,8 +21,8 @@ if (process.contextIsolated) {
       exit: (userData) => ipcRenderer.invoke('exit', userData),
       minimize: (userData) => ipcRenderer.invoke('minimize', userData),
       maximize: (userData) => ipcRenderer.invoke('maximize', userData),
-      unmaximize: (userData) => ipcRenderer.invoke('unmaximize', userData),
-    });
+      unmaximize: (userData) => ipcRenderer.invoke('unmaximize', userData)
+    })
   } catch (error) {
     console.error(error)
   }

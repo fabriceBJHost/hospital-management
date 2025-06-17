@@ -1,17 +1,18 @@
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import { Box, Card, CardContent, Typography } from '@mui/material'
 import React from 'react'
-import { FaMinus } from 'react-icons/fa';
-import { FaArrowTrendDown, FaArrowTrendUp } from 'react-icons/fa6';
+import { FaMinus } from 'react-icons/fa'
+import { FaArrowTrendDown, FaArrowTrendUp } from 'react-icons/fa6'
 
 const StatCard = ({ title, value, icon, color = 'primary.main', trend, sx = {} }) => {
-
   const getTrendIcon = () => {
-    if (!trend) return null;
-    if (trend.isNeutral) return <FaMinus />;
-    return trend.isPositive ?
-      <FaArrowTrendUp color="success" /> :
-      <FaArrowTrendDown color="error" />;
-  };
+    if (!trend) return null
+    if (trend.isNeutral) return <FaMinus />
+    return trend.isPositive ? (
+      <FaArrowTrendUp color="success" />
+    ) : (
+      <FaArrowTrendDown color="error" />
+    )
+  }
 
   return (
     <Card
@@ -51,8 +52,11 @@ const StatCard = ({ title, value, icon, color = 'primary.main', trend, sx = {} }
             <Typography
               variant="body2"
               color={
-                trend.isNeutral ? 'text.secondary' :
-                  trend.isPositive ? 'success.main' : 'error.main'
+                trend.isNeutral
+                  ? 'text.secondary'
+                  : trend.isPositive
+                    ? 'success.main'
+                    : 'error.main'
               }
               sx={{ ml: 0.5 }}
             >

@@ -1,22 +1,21 @@
-import React from 'react';
-import { Card, CardContent, Typography, Box, Chip, Grid } from '@mui/material';
-import { FaCalendar } from 'react-icons/fa';
-import { FaLocationDot } from 'react-icons/fa6';
+import React from 'react'
+import { Card, CardContent, Typography, Box, Chip, Grid } from '@mui/material'
+import { FaCalendar } from 'react-icons/fa'
+import { FaLocationDot } from 'react-icons/fa6'
 
-const AppointmentStatusCard = ({
-  total,
-  scheduled,
-  completed,
-  cancelled
-}) => {
+const AppointmentStatusCard = ({ total, scheduled, completed, cancelled }) => {
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Scheduled': return 'warning';
-      case 'Completed': return 'success';
-      case 'Cancelled': return 'error';
-      default: return 'default';
+      case 'Scheduled':
+        return 'warning'
+      case 'Completed':
+        return 'success'
+      case 'Cancelled':
+        return 'error'
+      default:
+        return 'default'
     }
-  };
+  }
 
   return (
     <Card sx={{ height: '100%' }}>
@@ -45,7 +44,7 @@ const AppointmentStatusCard = ({
         </Typography>
 
         <Grid container spacing={1}>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Chip
               label={`${scheduled} Scheduled`}
               color="warning"
@@ -59,7 +58,7 @@ const AppointmentStatusCard = ({
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Chip
               label={`${completed} Completed`}
               color="success"
@@ -73,7 +72,7 @@ const AppointmentStatusCard = ({
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Chip
               label={`${cancelled} Cancelled`}
               color="error"
@@ -90,7 +89,7 @@ const AppointmentStatusCard = ({
         </Grid>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default AppointmentStatusCard;
+export default AppointmentStatusCard

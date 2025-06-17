@@ -1,8 +1,8 @@
-const sqlite = require('better-sqlite3');
-const path = require('path');
-const bcrypt = require('bcryptjs');
+const sqlite = require('better-sqlite3')
+const path = require('path')
+const bcrypt = require('bcryptjs')
 
-const database = new sqlite('./hospital.db');
+const database = new sqlite('./hospital.db')
 
 /**
  * create patient table if not exist in database
@@ -22,8 +22,8 @@ const createPatientTableQuery = `
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP
   );
 
-`;
-database.prepare(createPatientTableQuery).run();
+`
+database.prepare(createPatientTableQuery).run()
 
 /**
  * create table doctor
@@ -41,8 +41,8 @@ const createDoctorTableQuery = `
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP
   );
 
-`;
-database.prepare(createDoctorTableQuery).run();
+`
+database.prepare(createDoctorTableQuery).run()
 
 /**
  * create appointment table
@@ -62,7 +62,7 @@ const createAppointmentTableQuery = `
     FOREIGN KEY (doctor_id) REFERENCES doctors(id),
   );
 
-`;
+`
 database.prepare(createAppointmentTableQuery).run()
 
 /**
@@ -82,7 +82,7 @@ const createMedicalRecordTableQuery = `
     FOREIGN KEY (doctor_id) REFERENCES doctors(id),
   );
 
-`;
+`
 database.prepare(createMedicalRecordTableQuery).run()
 
 /**
@@ -100,7 +100,7 @@ const createUsersTableQuery = `
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP
   );
 
-`;
+`
 database.prepare(createUsersTableQuery).run()
 
 /**
@@ -119,7 +119,7 @@ const createPrescriptionTableQuery = `
     FOREIGN KEY (medical_record_id) REFERENCES medical_records(id)
   );
 
-`;
+`
 database.prepare(createPrescriptionTableQuery).run()
 
 // ------------------------------------------------- execute function --------------------------------------------
