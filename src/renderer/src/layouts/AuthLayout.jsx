@@ -16,11 +16,7 @@ const AuthLayout = () => {
   return (
     <>
       <AuthNavigation />
-      <Container maxWidth="xl">
-        <Box>
-          <Outlet />
-        </Box>
-      </Container>
+      <Outlet />
     </>
   )
 }
