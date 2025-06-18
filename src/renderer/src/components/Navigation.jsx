@@ -177,6 +177,11 @@ const NavigationTest = ({ childrens }) => {
     }
   }, [])
 
+  const logout = () => {
+    window.session.clearSession()
+    window.location.href = '/login'
+  }
+
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: 'rgba(214, 214, 214, 0.17)' }}>
       {/* <CssBaseline /> */}
@@ -507,7 +512,7 @@ const NavigationTest = ({ childrens }) => {
             </ListItem>
           </Link>
 
-          <ListItem disablePadding sx={{ display: 'block' }}>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={logout}>
             <ListItemButton
               className={`${classe.ListItemButton} ${open ? classe.open : classe.closed}`}
             >

@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react'
 import classe from "../assets/css/Login.module.css"
 import { FaEye, FaEyeSlash, FaKey, FaUser, FaUserCircle } from 'react-icons/fa'
 import { LoginValidation } from '../function/Validation'
+import ErrorLoginModal from './Modals/ErrorLoginModal'
+import { useNavigate } from 'react-router-dom';
+import { useStateContext } from '../context/AuthContext';
 
 const Login = () => {
 
@@ -11,9 +14,14 @@ const Login = () => {
     password: ""
   })
 
+  const { setUser, setToken } = useStateContext();
+
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [seePassword, setSeePassword] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const navigate = useNavigate();
+
 
   const togglePasswordVisibility = () => {
     setSeePassword(!seePassword);
@@ -44,13 +52,30 @@ const Login = () => {
     setErrors(validationErrors);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = LoginValidation(formData);
     // Validate the entire form on submit
     if (Object.keys(validationErrors).length === 0) {
       // Proceed with form submission logic, e.g., API call
-      console.log("Form submitted successfully:", formData);
+      let response = await window.session.setSession(formData);
+      console.log(response);
+      if (response.success) {
+        // Clear form data and errors on successful login
+        setFormData({
+          username: "",
+          password: ""
+        });
+        setErrors({});
+        setTouched({});
+        setShowErrorModal(false);
+        setUser(response.session.user);
+        setToken(response.session.token);
+        // Optionally redirect or show success message
+        navigate('/'); // Redirect to dashboard or home page
+      } else {
+        setShowErrorModal(true);
+      }
     } else {
       // Set touched state for all fields to show errors
       setTouched({
@@ -62,6 +87,8 @@ const Login = () => {
   }
   return (
     <Container maxWidth="xl">
+      <ErrorLoginModal open={showErrorModal} close={() => setShowErrorModal(false)} />
+
       <Box sx={{ flexGrow: 1, minHeight: "100vh" }} className={classe.loginContainer}>
         <form className={classe.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>

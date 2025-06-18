@@ -34,3 +34,7 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+
+#default users
+username: admin
+password: 1234567890
