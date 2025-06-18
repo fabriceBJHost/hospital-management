@@ -22,7 +22,7 @@ $ npm run dev
 
 ### Build
 
-buils an aplication ith it
+build an aplication with it
 
 ```bash
 # For windows
@@ -35,6 +35,6 @@ $ npm run build:mac
 $ npm run build:linux
 ```
 
-#default users
-username: admin
-password: 1234567890
+### default users
+$ username: admin
+$ password: 1234567890
