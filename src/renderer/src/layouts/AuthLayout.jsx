@@ -1,14 +1,23 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
-import Navigation from '../components/Navigation'
+import { Navigate, Outlet } from 'react-router-dom'
 import { Box, Container } from '@mui/material'
+import AuthNavigation from '../components/AuthNavigation'
+import { useStateContext } from "../context/AuthContext"
 
 const AuthLayout = () => {
+
+  const { token } = useStateContext();
+
+  // If token is present, redirect to home
+  if (token) {
+    return <Navigate to={"/"} />; // Prevent rendering the layout
+  }
+
   return (
     <>
-      {/* <Navigation /> */}
+      <AuthNavigation />
       <Container maxWidth="xl">
-        <Box sx={{ mt: 6 }}>
+        <Box>
           <Outlet />
         </Box>
       </Container>

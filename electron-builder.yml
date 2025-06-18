@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: hospital
+productName: hospital Management
 directories:
   buildResources: build
 files:

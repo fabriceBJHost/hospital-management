@@ -6,14 +6,16 @@ const NotFound = () => {
   const navigate = useNavigate()
   return (
     <Box
-      height="100vh"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      bgcolor="#f5f5f5"
-      textAlign="center"
-      p={2}
+      sx={{
+        height:"100vh",
+        display:"flex",
+        flexDirection:"column",
+        alignItems:"center",
+        justifyContent:"center",
+        textAlign:"center",
+        p: 2,
+        overflow:"hidden"
+      }}
     >
       <Typography variant="h1" color="primary" gutterBottom>
         404

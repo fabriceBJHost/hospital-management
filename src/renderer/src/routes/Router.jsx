@@ -70,8 +70,14 @@ const Router = createHashRouter([
     ]
   },
   {
-    path: '/*',
-    element: <NotFound />
+    path: '/',
+    element: <AuthLayout />,
+    children: [
+      {
+        path: '/*',
+        element: <NotFound />
+      }
+    ]
   }
 ])
 
