@@ -13,9 +13,8 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('api', api)
 
     contextBridge.exposeInMainWorld('session', {
-      setSession: (sessionData) => ipcRenderer.invoke('set-session', sessionData),
+      setSession: (sessionData) => ipcRenderer.invoke('login', sessionData),
       getSession: () => ipcRenderer.invoke('get-session'),
-      clearSession: () => ipcRenderer.invoke('clear-session')
     })
 
     contextBridge.exposeInMainWorld('navigations', {

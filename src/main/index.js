@@ -135,7 +135,7 @@ ipcMain.handle('unmaximize', async (event, userData) => {
  * Session management using electron-store
  * This allows us to store session data like user information, tokens, etc.
  */
-ipcMain.handle('set-session', async (event, sessionData) => {
+ipcMain.handle('login', async (event, sessionData) => {
 
   const { username, password } = sessionData;
   const result = await login(username, password);
@@ -150,8 +150,6 @@ ipcMain.handle('set-session', async (event, sessionData) => {
       },
       token: result.id + '-' + Date.now() // fake example token
     };
-
-    store.set('session', sessionData);
     return { success: true, session: sessionData };
   } else {
     // return the error object to renderer

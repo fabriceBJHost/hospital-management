@@ -40,6 +40,7 @@ import { Avatar, Grid, InputBase } from '@mui/material'
 import { HiOutlineSquare2Stack } from 'react-icons/hi2'
 import { LiaTimesSolid } from 'react-icons/lia'
 import icon from '../assets/images/logo.png'
+import { useStateContext } from '../context/AuthContext'
 
 const drawerWidth = 230
 
@@ -123,6 +124,8 @@ const NavigationTest = ({ childrens }) => {
   let location = useLocation()
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
+  const { user, setToken, setUser } = useStateContext()
+  const UserInfo = user ? JSON.parse(user) : null
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -136,6 +139,7 @@ const NavigationTest = ({ childrens }) => {
    * function used to exit the app
    */
   const exit = () => {
+    setUser(null)
     window.navigations.exit(true)
   }
 
@@ -178,8 +182,8 @@ const NavigationTest = ({ childrens }) => {
   }, [])
 
   const logout = () => {
-    window.session.clearSession()
-    window.location.href = '/login'
+    setToken(null)
+    setUser(null)
   }
 
   return (
@@ -322,27 +326,31 @@ const NavigationTest = ({ childrens }) => {
           </Link>
 
           {/* users Link navigation */}
-          <Link className={classe.menu} to={'/users'}>
-            <ListItem
-              disablePadding
-              className={location.pathname == '/users' && classe.menuActive}
-              sx={{ display: 'block' }}
-            >
-              <ListItemButton
-                className={`${classe.ListItemButton} ${open ? classe.open : classe.closed}`}
-              >
-                <ListItemIcon className={open ? classe.iconOpen : classe.iconClosed}>
-                  <FaUsers
-                    className={location.pathname == '/users' ? classe.iconActive : classe.icon}
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  primary={'Utilisateurs'}
-                  className={open ? classe.textVisible : classe.textHidden}
-                />
-              </ListItemButton>
-            </ListItem>
-          </Link>
+          {
+            UserInfo && UserInfo.role === 'admin' && (
+              <Link className={classe.menu} to={'/users'}>
+                <ListItem
+                  disablePadding
+                  className={location.pathname == '/users' && classe.menuActive}
+                  sx={{ display: 'block' }}
+                >
+                  <ListItemButton
+                    className={`${classe.ListItemButton} ${open ? classe.open : classe.closed}`}
+                  >
+                    <ListItemIcon className={open ? classe.iconOpen : classe.iconClosed}>
+                      <FaUsers
+                        className={location.pathname == '/users' ? classe.iconActive : classe.icon}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={'Utilisateurs'}
+                      className={open ? classe.textVisible : classe.textHidden}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+            )
+          }
 
           {/* patient Link navigation */}
           <Link className={classe.menu} to={'/patients'}>

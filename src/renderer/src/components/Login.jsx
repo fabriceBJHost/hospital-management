@@ -69,7 +69,7 @@ const Login = () => {
         setErrors({});
         setTouched({});
         setShowErrorModal(false);
-        setUser(response.session.user);
+        setUser(JSON.stringify(response.session.user));
         setToken(response.session.token);
         // Optionally redirect or show success message
         navigate('/'); // Redirect to dashboard or home page

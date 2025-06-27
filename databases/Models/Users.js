@@ -40,7 +40,7 @@ const login = async (username, password) => {
     let user = await query.get(username.toLowerCase())
 
     if (user) {
-      let isPasswordValid = bcryptjs.compare(password, user.password)
+      let isPasswordValid = await bcryptjs.compare(password, user.password)
 
       if (isPasswordValid) {
         return user

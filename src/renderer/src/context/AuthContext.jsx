@@ -1,36 +1,34 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const StateContext = createContext({
   user: null,
   token: null,
-  setUser: () => {},
-  setToken: () => {}
+  setUser: () => { },
+  setToken: () => { },
 });
 
 export const ContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setTokenState] = useState(null);
-
-  useEffect(() => {
-    // Load session on mount
-    window.session.getSession().then((session) => {
-      if (session) {
-        setUser(session.user || null);
-        setTokenState(session.token || null);
-      }
-    });
-  }, []);
+  const [user, _setUser] = useState(localStorage.getItem('user'));
+  const [token, _setToken] = useState(sessionStorage.getItem('token'));
 
   const setToken = async (newToken) => {
-    setTokenState(newToken);
-    const updatedSession = { user, token: newToken };
-    await window.session.setSession(updatedSession);
+    _setToken(newToken);
+
+    if (newToken) {
+      sessionStorage.setItem('token', newToken);
+    } else {
+      sessionStorage.removeItem('token');
+    }
   };
 
-  const setUserWrapper = async (newUser) => {
-    setUser(newUser);
-    const updatedSession = { user: newUser, token };
-    await window.session.setSession(updatedSession);
+  const setUser = async (newUser) => {
+    _setUser(newUser);
+
+    if (newUser) {
+      localStorage.setItem('user', newUser);
+    } else {
+      localStorage.removeItem('user');
+    }
   };
 
   return (
@@ -38,7 +36,7 @@ export const ContextProvider = ({ children }) => {
       value={{
         user,
         token,
-        setUser: setUserWrapper,
+        setUser,
         setToken
       }}
     >
