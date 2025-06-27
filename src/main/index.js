@@ -146,7 +146,8 @@ ipcMain.handle('login', async (event, sessionData) => {
       user: {
         id: result.id,
         username: result.username,
-        role: result.role // assuming user has role
+        role: result.role, // assuming user has role
+        images: result.images || null // assuming user has images
       },
       token: result.id + '-' + Date.now() // fake example token
     };
