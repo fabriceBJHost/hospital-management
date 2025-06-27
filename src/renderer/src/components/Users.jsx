@@ -172,6 +172,7 @@ const Users = () => {
           </Box>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 5 }} className={classe.statGridItem}>
+          <p>Bonjour, vous êtes connecté en tant que :</p>
           <Card sx={{ textAlign: 'center', boxShadow: 'none' }}>
             <CardActionArea>
               <CardMedia
@@ -190,14 +191,39 @@ const Users = () => {
               />
               <CardContent>
                 <Typography gutterBottom variant="h6" component="div">
-                  {UserInfo.username}
+                  Nom d'utilisateur: {UserInfo.username}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {UserInfo.role}
+                  Rôles : {UserInfo.role}
                 </Typography>
               </CardContent>
             </CardActionArea>
           </Card>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4 }} className={classe.statGridItem}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="body1">
+                Modifier votre information
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
+                Modifier votre information
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="outlined"
+                color="primary"
+                fullWidth
+              >
+                Ajouter une nouvelle utilisateur
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
 
@@ -242,7 +268,7 @@ const Users = () => {
           </Card>
         </Grid>
       </Grid>
-    </Container>
+    </Container >
   )
 }
 
