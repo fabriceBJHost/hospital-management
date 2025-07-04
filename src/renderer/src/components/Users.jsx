@@ -220,7 +220,10 @@ const Users = () => {
             </CardActionArea>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4 }} className={classe.statGridItem}>
+        <Grid
+          size={{ xs: 12, sm: 12, md: 6, lg: 4 }}
+          className={`${classe.statGridItem} ${classe.blockAddInfo}`}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="body1">Modifier votre information</Typography>

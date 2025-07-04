@@ -22,3 +22,9 @@
   text-align: center;
   font-style: italic;
 }
+
+.blockAddInfo {
+  background: url('../images/engrenages.png') no-repeat center/cover;
+  backdrop-filter: blur(28px);
+  object-fit: cover;
+}
