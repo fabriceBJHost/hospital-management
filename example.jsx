@@ -88,20 +88,20 @@ if (!fs.existsSync(imgDir)) {
 }
 
 // main.js
-const Store = require('electron-store');
-const store = new Store();
+const Store = require('electron-store')
+const store = new Store()
 
 // Save session after successful login
 ipcMain.handle('set-session', (event, sessionData) => {
-  store.set('session', sessionData); // { role: 'admin', token: '...', etc }
-});
+  store.set('session', sessionData) // { role: 'admin', token: '...', etc }
+})
 
 // Get session anywhere
 ipcMain.handle('get-session', () => {
-  return store.get('session');
-});
+  return store.get('session')
+})
 
 // Clear session on logout
 ipcMain.handle('clear-session', () => {
-  store.delete('session');
-});
+  store.delete('session')
+})

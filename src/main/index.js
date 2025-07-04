@@ -2,13 +2,13 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-const Store = require('electron-store').default;
-const { login } = require('../../databases/Models/Users');
+const Store = require('electron-store').default
+const { login } = require('../../databases/Models/Users')
 
 /**
  * Initialize electron-store
  */
-const store = new Store(); // ✅ only works if Store is a function
+const store = new Store() // ✅ only works if Store is a function
 let mainWindow
 
 function createWindow() {
@@ -136,9 +136,8 @@ ipcMain.handle('unmaximize', async (event, userData) => {
  * This allows us to store session data like user information, tokens, etc.
  */
 ipcMain.handle('login', async (event, sessionData) => {
-
-  const { username, password } = sessionData;
-  const result = await login(username, password);
+  const { username, password } = sessionData
+  const result = await login(username, password)
 
   if (result && !result.errorPassword && !result.errorUsername) {
     // Success: store session
@@ -150,26 +149,26 @@ ipcMain.handle('login', async (event, sessionData) => {
         images: result.images || null // assuming user has images
       },
       token: result.id + '-' + Date.now() // fake example token
-    };
-    return { success: true, session: sessionData };
+    }
+    return { success: true, session: sessionData }
   } else {
     // return the error object to renderer
-    return { success: false, ...result };
+    return { success: false, ...result }
   }
-});
+})
 
 /**
  * Get session data
  * This can be used to retrieve session information anywhere in the app.
  */
 ipcMain.handle('get-session', () => {
-  return store.get('session');
-});
+  return store.get('session')
+})
 
 /**
  * Clear session data
  * This can be used to clear session information, for example on logout.
  */
 ipcMain.handle('clear-session', () => {
-  store.delete('session');
-});
+  store.delete('session')
+})

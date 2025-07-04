@@ -326,31 +326,29 @@ const NavigationTest = ({ childrens }) => {
           </Link>
 
           {/* users Link navigation */}
-          {
-            UserInfo && UserInfo.role === 'admin' && (
-              <Link className={classe.menu} to={'/users'}>
-                <ListItem
-                  disablePadding
-                  className={location.pathname == '/users' && classe.menuActive}
-                  sx={{ display: 'block' }}
+          {UserInfo && UserInfo.role === 'admin' && (
+            <Link className={classe.menu} to={'/users'}>
+              <ListItem
+                disablePadding
+                className={location.pathname == '/users' && classe.menuActive}
+                sx={{ display: 'block' }}
+              >
+                <ListItemButton
+                  className={`${classe.ListItemButton} ${open ? classe.open : classe.closed}`}
                 >
-                  <ListItemButton
-                    className={`${classe.ListItemButton} ${open ? classe.open : classe.closed}`}
-                  >
-                    <ListItemIcon className={open ? classe.iconOpen : classe.iconClosed}>
-                      <FaUsers
-                        className={location.pathname == '/users' ? classe.iconActive : classe.icon}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={'Utilisateurs'}
-                      className={open ? classe.textVisible : classe.textHidden}
+                  <ListItemIcon className={open ? classe.iconOpen : classe.iconClosed}>
+                    <FaUsers
+                      className={location.pathname == '/users' ? classe.iconActive : classe.icon}
                     />
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-            )
-          }
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={'Utilisateurs'}
+                    className={open ? classe.textVisible : classe.textHidden}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          )}
 
           {/* patient Link navigation */}
           <Link className={classe.menu} to={'/patients'}>
@@ -509,7 +507,9 @@ const NavigationTest = ({ childrens }) => {
               >
                 <ListItemIcon className={open ? classe.iconOpen : classe.iconClosed}>
                   <FaBell
-                    className={location.pathname == '/notification' ? classe.iconActive : classe.icon}
+                    className={
+                      location.pathname == '/notification' ? classe.iconActive : classe.icon
+                    }
                   />
                 </ListItemIcon>
                 <ListItemText

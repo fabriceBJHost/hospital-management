@@ -8,54 +8,52 @@ import classe from '../assets/css/Navigation.module.css'
 import { isMaximized } from '../function/WindowState'
 
 const AuthNavigation = () => {
-
   const location = useLocation()
 
   /**
-     * function used to exit the app
-     */
-    const exit = () => {
-      window.navigations.exit(true)
+   * function used to exit the app
+   */
+  const exit = () => {
+    window.navigations.exit(true)
+  }
+
+  /**
+   * function used to minimize the app
+   */
+  const minimize = () => {
+    window.navigations.minimize(true)
+  }
+
+  /**
+   * function used to let window maximized
+   */
+  const maximize = () => {
+    window.navigations.maximize(true)
+  }
+
+  /**
+   * function used to let window unmaximize
+   */
+  const unmaximize = () => {
+    window.navigations.unmaximize(true)
+  }
+
+  const [max, setMax] = useState(false)
+
+  useEffect(() => {
+    const checkMaximized = () => {
+      setMax(isMaximized())
     }
 
-    /**
-     * function used to minimize the app
-     */
-    const minimize = () => {
-      window.navigations.minimize(true)
+    // check on mount
+    checkMaximized()
+
+    window.addEventListener('resize', checkMaximized)
+
+    return () => {
+      window.removeEventListener('resize', checkMaximized)
     }
-
-    /**
-     * function used to let window maximized
-     */
-    const maximize = () => {
-      window.navigations.maximize(true)
-    }
-
-    /**
-     * function used to let window unmaximize
-     */
-    const unmaximize = () => {
-      window.navigations.unmaximize(true)
-    }
-
-    const [max, setMax] = useState(false)
-
-    useEffect(() => {
-      const checkMaximized = () => {
-        setMax(isMaximized())
-      }
-
-      // check on mount
-      checkMaximized()
-
-      window.addEventListener('resize', checkMaximized)
-
-      return () => {
-        window.removeEventListener('resize', checkMaximized)
-      }
-    }, [])
-
+  }, [])
 
   return (
     <AppBar position="fixed" className="drag" sx={{ overflow: 'hidden' }}>
@@ -105,13 +103,7 @@ const AuthNavigation = () => {
                 <FaRegSquare />
               </IconButton>
             )}
-            <IconButton
-              edge="start"
-              color="error"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-              onClick={exit}
-            >
+            <IconButton edge="start" color="error" aria-label="menu" sx={{ mr: 2 }} onClick={exit}>
               <LiaTimesSolid />
             </IconButton>
           </Grid>

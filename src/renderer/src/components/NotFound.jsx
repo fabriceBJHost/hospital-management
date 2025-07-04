@@ -7,14 +7,14 @@ const NotFound = () => {
   return (
     <Box
       sx={{
-        height:"100vh",
-        display:"flex",
-        flexDirection:"column",
-        alignItems:"center",
-        justifyContent:"center",
-        textAlign:"center",
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
         p: 2,
-        overflow:"hidden"
+        overflow: 'hidden'
       }}
     >
       <Typography variant="h1" color="primary" gutterBottom>

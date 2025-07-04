@@ -4,7 +4,6 @@ import Navigation from '../components/Navigation'
 import { useStateContext } from '../context/AuthContext'
 
 const DefaultLayout = () => {
-
   const { token } = useStateContext()
 
   if (!token) {

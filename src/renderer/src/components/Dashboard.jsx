@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+// import React, { useEffect, useState } from 'react'
 import { Card, CardContent, Typography, Container, Box, Chip } from '@mui/material'
 import { Bar, Pie, Line } from 'react-chartjs-2'
 import {
@@ -88,15 +88,43 @@ const Dashboard = () => {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 20 },
-    { field: 'patientName', headerName: 'Patient Name', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center' },
-    { field: 'doctorName', headerName: 'Doctor Name', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center' },
-    { field: 'appointmentDate', headerName: 'Appointment Date', flex: 1, minWidth: 150, headerAlign: 'center', align: 'center' },
-    { field: 'status', headerName: 'Status', flex: 1, minWidth: 120, headerAlign: 'center', align: 'center', renderCell: (params) => {
+    {
+      field: 'patientName',
+      headerName: 'Patient Name',
+      flex: 1,
+      minWidth: 150,
+      headerAlign: 'center',
+      align: 'center'
+    },
+    {
+      field: 'doctorName',
+      headerName: 'Doctor Name',
+      flex: 1,
+      minWidth: 150,
+      headerAlign: 'center',
+      align: 'center'
+    },
+    {
+      field: 'appointmentDate',
+      headerName: 'Appointment Date',
+      flex: 1,
+      minWidth: 150,
+      headerAlign: 'center',
+      align: 'center'
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      flex: 1,
+      minWidth: 120,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
         const statusColors = {
           Scheduled: '#42a5f5',
           Completed: '#66bb6a',
           Cancelled: '#ef5350'
-        };
+        }
         return (
           <Box>
             <Chip
@@ -104,28 +132,88 @@ const Dashboard = () => {
               sx={{
                 color: statusColors[params.value] || 'gray',
                 fontWeight: 'bold',
-                border: `solid 1px ${statusColors[params.value]}`,
+                border: `solid 1px ${statusColors[params.value]}`
               }}
               size="small"
               variant="outlined"
             />
           </Box>
-        );
+        )
       }
     }
   ]
 
   const dataRow = [
-    { id: 1, patientName: 'John Doe', doctorName: 'Dr. Smith', appointmentDate: '2023-10-01', status: 'Scheduled' },
-    { id: 2, patientName: 'Jane Doe', doctorName: 'Dr. Johnson', appointmentDate: '2023-10-02', status: 'Completed' },
-    { id: 3, patientName: 'Alice Smith', doctorName: 'Dr. Brown', appointmentDate: '2023-10-03', status: 'Cancelled' },
-    { id: 4, patientName: 'Bob Johnson', doctorName: 'Dr. White', appointmentDate: '2023-10-04', status: 'Scheduled' },
-    { id: 5, patientName: 'Charlie Brown', doctorName: 'Dr. Green', appointmentDate: '2023-10-05', status: 'Completed' },
-    { id: 6, patientName: 'David Wilson', doctorName: 'Dr. Black', appointmentDate: '2023-10-06', status: 'Scheduled' },
-    { id: 7, patientName: 'Eva Adams', doctorName: 'Dr. Blue', appointmentDate: '2023-10-07', status: 'Cancelled' },
-    { id: 8, patientName: 'Frank Miller', doctorName: 'Dr. Red', appointmentDate: '2023-10-08', status: 'Scheduled' },
-    { id: 9, patientName: 'Grace Lee', doctorName: 'Dr. Yellow', appointmentDate: '2023-10-09', status: 'Completed' },
-    { id: 10, patientName: 'Hank Taylor', doctorName: 'Dr. Purple', appointmentDate: '2023-10-10', status: 'Scheduled' }
+    {
+      id: 1,
+      patientName: 'John Doe',
+      doctorName: 'Dr. Smith',
+      appointmentDate: '2023-10-01',
+      status: 'Scheduled'
+    },
+    {
+      id: 2,
+      patientName: 'Jane Doe',
+      doctorName: 'Dr. Johnson',
+      appointmentDate: '2023-10-02',
+      status: 'Completed'
+    },
+    {
+      id: 3,
+      patientName: 'Alice Smith',
+      doctorName: 'Dr. Brown',
+      appointmentDate: '2023-10-03',
+      status: 'Cancelled'
+    },
+    {
+      id: 4,
+      patientName: 'Bob Johnson',
+      doctorName: 'Dr. White',
+      appointmentDate: '2023-10-04',
+      status: 'Scheduled'
+    },
+    {
+      id: 5,
+      patientName: 'Charlie Brown',
+      doctorName: 'Dr. Green',
+      appointmentDate: '2023-10-05',
+      status: 'Completed'
+    },
+    {
+      id: 6,
+      patientName: 'David Wilson',
+      doctorName: 'Dr. Black',
+      appointmentDate: '2023-10-06',
+      status: 'Scheduled'
+    },
+    {
+      id: 7,
+      patientName: 'Eva Adams',
+      doctorName: 'Dr. Blue',
+      appointmentDate: '2023-10-07',
+      status: 'Cancelled'
+    },
+    {
+      id: 8,
+      patientName: 'Frank Miller',
+      doctorName: 'Dr. Red',
+      appointmentDate: '2023-10-08',
+      status: 'Scheduled'
+    },
+    {
+      id: 9,
+      patientName: 'Grace Lee',
+      doctorName: 'Dr. Yellow',
+      appointmentDate: '2023-10-09',
+      status: 'Completed'
+    },
+    {
+      id: 10,
+      patientName: 'Hank Taylor',
+      doctorName: 'Dr. Purple',
+      appointmentDate: '2023-10-10',
+      status: 'Scheduled'
+    }
   ]
 
   const paginationModel = { page: 0, pageSize: 5 }
@@ -216,7 +304,7 @@ const Dashboard = () => {
                       pageSizeOptions={[5, 10]}
                       disableRowSelectionOnClick
                       sx={{
-                        border: "solid 1px #e0e0e0",
+                        border: 'solid 1px #e0e0e0',
                         width: 'auto', // Ensures the DataGrid takes full width
                         height: '50%', // Ensures it grows to fit content
                         minHeight: 400, // Minimum height for the DataGrid

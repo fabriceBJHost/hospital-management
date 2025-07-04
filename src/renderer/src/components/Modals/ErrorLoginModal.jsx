@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -6,8 +6,8 @@ import {
   DialogActions,
   Button,
   Typography
-} from '@mui/material';
-import { FaExclamationTriangle } from 'react-icons/fa';
+} from '@mui/material'
+import { FaExclamationTriangle } from 'react-icons/fa'
 
 const ErrorLoginModal = ({ open, close }) => {
   return (
@@ -31,7 +31,7 @@ const ErrorLoginModal = ({ open, close }) => {
         </Button>
       </DialogActions>
     </Dialog>
-  );
-};
+  )
+}
 
-export default ErrorLoginModal;
+export default ErrorLoginModal
