@@ -16,11 +16,14 @@ import {
   Card,
   CardContent,
   CardMedia,
-  CardActionArea
+  CardActionArea,
+  Stack,
+  IconButton,
+  Tooltip as Tooltips
 } from '@mui/material'
 import DefaultProfile from '../assets/images/admin.png'
 import { DataGrid } from '@mui/x-data-grid'
-import { FaPlusCircle } from 'react-icons/fa'
+import { FaEdit, FaPlusCircle, FaTrashAlt } from 'react-icons/fa'
 import classe from '../assets/css/Users.module.css'
 import { Bar } from 'react-chartjs-2'
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js'
@@ -52,13 +55,6 @@ const Users = () => {
 
   const theme = createTheme({
     components: {
-      MuiIconButton: {
-        styleOverrides: {
-          root: {
-            color: 'gray' // Change the color of toolbar icons
-          }
-        }
-      },
       MuiButton: {
         styleOverrides: {
           root: {
@@ -154,15 +150,41 @@ const Users = () => {
       minWidth: 150,
       headerAlign: 'center',
       align: 'center',
-      renderCell: () => (
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<FaPlusCircle />}
-          // onClick={() => alert(`Action for ${params.row.username}`)}
-        >
-          Action
-        </Button>
+      renderCell: ({ params }) => (
+        <Stack direction={'row'} gap={2} justifyContent="center" alignItems="center">
+          <Tooltips
+            title="Modifier l'utilisateur"
+            arrow
+            placement="right"
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  fontSize: '13px'
+                }
+              }
+            }}
+          >
+            <IconButton color="primary">
+              <FaEdit />
+            </IconButton>
+          </Tooltips>
+          <Tooltips
+            title="Supprimer l'utilisateur"
+            arrow
+            placement="right"
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  fontSize: '13px'
+                }
+              }
+            }}
+          >
+            <IconButton color="error">
+              <FaTrashAlt />
+            </IconButton>
+          </Tooltips>
+        </Stack>
       )
     }
   ]
@@ -175,6 +197,11 @@ const Users = () => {
   }))
 
   const paginationModel = { page: 0, pageSize: 10 }
+
+  UserInfo.activities = [
+    { description: 'Connexion réussie', date: '2025-07-11T14:32:00' },
+    { description: 'Profil mis à jour', date: '2025-07-10T09:21:00' }
+  ]
 
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
@@ -224,19 +251,17 @@ const Users = () => {
           size={{ xs: 12, sm: 12, md: 6, lg: 4 }}
           className={`${classe.statGridItem} ${classe.blockAddInfo}`}
         >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="body1">Modifier votre information</Typography>
-              <Button variant="contained" color="primary" fullWidth>
-                Modifier votre information
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Button variant="outlined" color="primary" fullWidth>
-                Ajouter une nouvelle utilisateur
-              </Button>
-            </Grid>
-          </Grid>
+          <Typography variant="h6" gutterBottom>
+            Actions rapides
+          </Typography>
+          <Stack spacing={2}>
+            <Button variant="contained" color="primary" startIcon={<FaEdit />} fullWidth>
+              Modifier le profil
+            </Button>
+            <Button variant="outlined" color="primary" startIcon={<FaPlusCircle />} fullWidth>
+              Ajouter un utilisateur
+            </Button>
+          </Stack>
         </Grid>
       </Grid>
 

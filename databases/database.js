@@ -34,6 +34,7 @@ const createDoctorTableQuery = `
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
+    images TEXT DEFAULT NULL,
     specialization TEXT,
     phone TEXT,
     email TEXT,
