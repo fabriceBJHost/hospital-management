@@ -23,3 +23,9 @@
   text-align: center;
   font-style: italic;
 }
+.doctorList {
+  height: 350px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  font-size: 11px!important;
+}

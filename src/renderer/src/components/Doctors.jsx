@@ -1,5 +1,4 @@
 import {
-  Box,
   Container,
   Grid,
   Typography,
@@ -10,21 +9,22 @@ import {
   Card,
   CardContent,
   Tooltip as Tooltips,
-  IconButton
+  IconButton,
+  Button
 } from '@mui/material'
 import classe from '../assets/css/Doctor.module.css'
-import { Bar } from 'react-chartjs-2'
-import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js'
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { frFR } from '@mui/x-data-grid/locales'
+import { frFR as frFRDate } from '@mui/x-date-pickers/locales'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { DataGrid } from '@mui/x-data-grid'
-import { FaEdit, FaTrashAlt } from 'react-icons/fa'
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
+import { FaCalendarAlt, FaEdit, FaPlusCircle, FaTrashAlt } from 'react-icons/fa'
+import 'dayjs/locale/fr'
+dayjs.locale('fr')
 
 const Doctors = () => {
   const theme = createTheme({
@@ -212,9 +212,9 @@ const Doctors = () => {
     { id: 2, working_date: '2025-07-14', doctor_id: 2 },
     { id: 3, working_date: '2025-07-15', doctor_id: 3 },
     { id: 4, working_date: '2025-07-15', doctor_id: 4 },
-    { id: 5, working_date: '2025-07-16', doctor_id: 5 },
-    { id: 6, working_date: '2025-07-16', doctor_id: 6 },
-    { id: 7, working_date: '2025-07-17', doctor_id: 7 },
+    { id: 5, working_date: '2025-07-15', doctor_id: 5 },
+    { id: 6, working_date: '2025-07-15', doctor_id: 6 },
+    { id: 7, working_date: '2025-07-15', doctor_id: 7 },
     { id: 8, working_date: '2025-07-17', doctor_id: 8 },
     { id: 9, working_date: '2025-07-18', doctor_id: 9 },
     { id: 10, working_date: '2025-07-18', doctor_id: 10 },
@@ -225,41 +225,7 @@ const Doctors = () => {
     { id: 15, working_date: '2025-07-21', doctor_id: 15 }
   ]
 
-  /**
-   * * Group doctors by specialization
-   */
-  const groupedDoctors = doctors.reduce((acc, doctor) => {
-    acc[doctor.specialization] = (acc[doctor.specialization] || 0) + 1
-    return acc
-  }, {})
-
-  // * Prepare data for the chart
-  const labels = Object.keys(groupedDoctors)
-  const data = Object.values(groupedDoctors)
-
-  const chartData = {
-    labels,
-    datasets: [
-      {
-        label: 'Number of Doctors',
-        data,
-        backgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#4BC0C0',
-          '#9966FF',
-          '#FF9F40',
-          '#66BB6A',
-          '#EC407A',
-          '#26C6DA',
-          '#7E57C2'
-        ]
-      }
-    ]
-  }
-
-  const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [doctorsOnDate, setDoctorsOnDate] = useState([])
 
   const handleDateChange = (date) => {
@@ -275,6 +241,10 @@ const Doctors = () => {
 
     setDoctorsOnDate(doctorsWorking)
   }
+
+  useEffect(() => {
+    handleDateChange(selectedDate)
+  }, [])
 
   const columns = [
     {
@@ -393,28 +363,20 @@ const Doctors = () => {
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
       <Grid container spacing={2} className={classe.HeaderGridContainer}>
-        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 6 }} className={classe.statGridItem}>
-          <Box>
-            <Grid>
-              <Bar data={chartData} />
-            </Grid>
-            <Grid>
-              <Typography variant="h6" className={classe.title}>
-                Statistique des docteurs
-              </Typography>
-            </Grid>
-          </Box>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 6 }} className={classe.statGridItem}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 8 }} className={classe.statGridItem}>
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale="fr"
+            localeText={frFRDate.components.MuiLocalizationProvider.defaultProps.localeText}
+          >
             <div style={{ display: 'flex', gap: '2rem' }}>
               <DateCalendar
                 onChange={handleDateChange}
                 sx={{ border: 'solid 1px #56aaff', borderRadius: 3 }}
               />
-              <div>
+              <div className={classe.doctorList}>
                 <Typography variant="h6">
-                  Doctors working on:{' '}
+                  Les médecins travaillant le:{' '}
                   {selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : 'Select a date'}
                 </Typography>
                 {doctorsOnDate.length > 0 ? (
@@ -424,14 +386,24 @@ const Doctors = () => {
                         <Stack direction="row" spacing={2} alignItems="center">
                           <Avatar src={doc.images} alt={doc.first_name} />
                           <div>
-                            <Typography>
-                              <strong>
-                                {doc.first_name} {doc.last_name}
-                              </strong>
+                            <Typography variant="subtitle2" fontWeight="bold">
+                              {doc.first_name} {doc.last_name}
                             </Typography>
-                            <Typography variant="body2">{doc.specialization}</Typography>
-                            <Typography variant="body2">{doc.phone}</Typography>
-                            <Typography variant="body2">{doc.email}</Typography>
+                            <br />
+                            <Typography variant="caption">{doc.specialization}</Typography>
+                            <br />
+                            <Typography variant="caption">{doc.phone}</Typography>
+                            <br />
+                            <Typography
+                              variant="caption"
+                              sx={{
+                                whiteSpace: 'normal',
+                                wordBreak: 'break-all',
+                                maxWidth: '200px' // adjust as needed
+                              }}
+                            >
+                              {doc.email}
+                            </Typography>
                           </div>
                         </Stack>
                       </ListItem>
@@ -443,6 +415,19 @@ const Doctors = () => {
               </div>
             </div>
           </LocalizationProvider>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4 }} className={classe.statGridItem}>
+          <Typography variant="h6" gutterBottom>
+            Actions rapides
+          </Typography>
+          <Stack spacing={2}>
+            <Button variant="contained" color="primary" startIcon={<FaPlusCircle />} fullWidth>
+              Ajouter un Médecin
+            </Button>
+            <Button variant="outlined" color="primary" startIcon={<FaCalendarAlt />} fullWidth>
+              Ajouter un Planning
+            </Button>
+          </Stack>
         </Grid>
       </Grid>
       <Grid container spacing={2} style={{ marginTop: 20 }}>
