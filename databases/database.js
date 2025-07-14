@@ -1,5 +1,5 @@
 const sqlite = require('better-sqlite3')
-const path = require('path')
+// const path = require('path')
 const bcrypt = require('bcryptjs')
 
 const database = new sqlite('./hospital.db')
@@ -122,6 +122,24 @@ const createPrescriptionTableQuery = `
 
 `
 database.prepare(createPrescriptionTableQuery).run()
+
+/**
+ * create Working day tabme
+ */
+const createWorkingDaysTableQuery = `
+
+  CREATE TABLE IF NOT EXISTS working_day (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    working_date TEXT NOT NULL,
+    doctor_id INTEGER NOT NULL,
+    FOREIGN KEY (doctor_id) REFERENCES doctor(id),
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+  );
+
+
+`
+database.prepare(createWorkingDaysTableQuery).run()
 
 // ------------------------------------------------- execute function --------------------------------------------
 

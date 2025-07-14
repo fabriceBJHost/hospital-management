@@ -1,0 +1,25 @@
+.HeaderGridContainer {
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 10px;
+  width: 100%;
+  padding: 10px;
+  background-color: rgb(243, 243, 243);
+}
+
+.statGridItem {
+  /* flex: 1 0 20%; 4 items per row */
+  /* min-width: 25%; */
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.85);
+  text-align: center;
+  font-style: italic;
+}
