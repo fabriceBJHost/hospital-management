@@ -8,3 +8,4 @@ hospital.db
 charge.txt
 package-lock.json
 .devdbrc
+patients.json

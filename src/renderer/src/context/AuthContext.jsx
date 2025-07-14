@@ -7,6 +7,7 @@ const StateContext = createContext({
   setToken: () => {}
 })
 
+// eslint-disable-next-line react/prop-types
 export const ContextProvider = ({ children }) => {
   const [user, _setUser] = useState(localStorage.getItem('user'))
   const [token, _setToken] = useState(sessionStorage.getItem('token'))
@@ -45,4 +46,5 @@ export const ContextProvider = ({ children }) => {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useStateContext = () => useContext(StateContext)

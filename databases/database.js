@@ -18,6 +18,8 @@ const createPatientTableQuery = `
     phone TEXT,
     email TEXT,
     address TEXT,
+    is_hospitalized BOOLEAN DEFAULT FALSE,
+    images TEXT DEFAULT NULL,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP
   );
