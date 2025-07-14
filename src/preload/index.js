@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+const { getAll } = require('../../databases/Models/Users')
 
 // Custom APIs for renderer
 const api = {}
@@ -22,6 +23,12 @@ if (process.contextIsolated) {
       minimize: (userData) => ipcRenderer.invoke('minimize', userData),
       maximize: (userData) => ipcRenderer.invoke('maximize', userData),
       unmaximize: (userData) => ipcRenderer.invoke('unmaximize', userData)
+    })
+
+    contextBridge.exposeInMainWorld('users', {
+      getUsers: () => getAll(),
+      insertNewUser: (request) => ipcRenderer.invoke('register', request),
+      deleteUser: (request) => ipcRenderer.invoke('deleteUsers', request)
     })
   } catch (error) {
     console.error(error)

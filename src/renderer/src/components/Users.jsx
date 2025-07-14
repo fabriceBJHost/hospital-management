@@ -1,17 +1,9 @@
-// import React, { useState, useEffect } from 'react'
 import {
   Box,
   Button,
-  // TextField,
-  // Select,
-  // MenuItem,
-  // InputLabel,
-  // FormControl,
   Typography,
   Avatar,
   Grid,
-  // Paper,
-  // IconButton,
   Container,
   Card,
   CardContent,
@@ -19,7 +11,10 @@ import {
   CardActionArea,
   Stack,
   IconButton,
-  Tooltip as Tooltips
+  Tooltip as Tooltips,
+  CircularProgress,
+  Alert,
+  Snackbar
 } from '@mui/material'
 import DefaultProfile from '../assets/images/admin.png'
 import { DataGrid } from '@mui/x-data-grid'
@@ -30,6 +25,11 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 import { useStateContext } from '../context/AuthContext'
 import { frFR } from '@mui/x-data-grid/locales'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { getAllUsers } from '../function/Request'
+import { useQuery } from '@tanstack/react-query'
+import AddUsersModal from './Modals/AddUsersModal'
+import { useState } from 'react'
+import DeleteUsersModal from './Modals/DeleteUsersModal'
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
@@ -37,21 +37,15 @@ const Users = () => {
   const { user } = useStateContext()
   const UserInfo = user ? JSON.parse(user) : null
 
-  const users = [
-    { name: 'Alice', role: 'admin', images: DefaultProfile },
-    { name: 'Bob', role: 'staff', images: DefaultProfile },
-    { name: 'Charlie', role: 'staff', images: DefaultProfile },
-    { name: 'Diana', role: 'admin', images: DefaultProfile },
-    { name: 'Eve', role: 'staff', images: DefaultProfile },
-    { name: 'Frank', role: 'admin', images: DefaultProfile },
-    { name: 'Grace', role: 'staff', images: DefaultProfile },
-    { name: 'Heidi', role: 'staff', images: DefaultProfile },
-    { name: 'Ivan', role: 'admin', images: DefaultProfile },
-    { name: 'Judy', role: 'staff', images: DefaultProfile },
-    { name: 'Karl', role: 'staff', images: DefaultProfile },
-    { name: 'Leo', role: 'admin', images: DefaultProfile },
-    { name: 'Mallory', role: 'staff', images: DefaultProfile }
-  ]
+  const {
+    data: users = [],
+    isPending,
+    isError,
+    error
+  } = useQuery({
+    queryKey: ['Users'],
+    queryFn: getAllUsers
+  })
 
   const theme = createTheme({
     components: {
@@ -150,7 +144,7 @@ const Users = () => {
       minWidth: 150,
       headerAlign: 'center',
       align: 'center',
-      renderCell: ({ params }) => (
+      renderCell: (params) => (
         <Stack direction={'row'} gap={2} justifyContent="center" alignItems="center">
           <Tooltips
             title="Modifier l'utilisateur"
@@ -180,7 +174,7 @@ const Users = () => {
               }
             }}
           >
-            <IconButton color="error">
+            <IconButton color="error" onClick={() => openDeleteModalFunction(params.value)}>
               <FaTrashAlt />
             </IconButton>
           </Tooltips>
@@ -189,22 +183,80 @@ const Users = () => {
     }
   ]
 
-  const dataRow = users.map((user, index) => ({
-    id: index + 1,
-    username: user.name,
+  const dataRow = users.map((user) => ({
+    id: user.id,
+    username: user.username,
     role: user.role,
-    images: user.images
+    images: user.images,
+    action: user.id
   }))
 
   const paginationModel = { page: 0, pageSize: 10 }
 
-  UserInfo.activities = [
-    { description: 'Connexion réussie', date: '2025-07-11T14:32:00' },
-    { description: 'Profil mis à jour', date: '2025-07-10T09:21:00' }
-  ]
+  const [open, setOpen] = useState(false)
+
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
+  const [opens, setOpenSnackBar] = useState(false)
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpenSnackBar(false)
+  }
+
+  /**
+   * delete function and props
+   */
+  const [openDeleteModal, setOpenDeletModal] = useState(false)
+  const [idToSendDelete, setIdToSendDelete] = useState(null)
+  const openDeleteModalFunction = (id) => {
+    setIdToSendDelete(id)
+    setOpenDeletModal(true)
+  }
+  const handleCloseDeleteModal = () => setOpenDeletModal(false)
+  const [openSnackDelete, setOpenSnackDelete] = useState(false)
+
+  const handleCloseSnackbarDelete = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpenSnackDelete(false)
+  }
 
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
+      <AddUsersModal handleClose={handleClose} open={open} setOpenSnack={setOpenSnackBar} />
+      <DeleteUsersModal
+        handleClose={handleCloseDeleteModal}
+        open={openDeleteModal}
+        setOpenSnackDelete={setOpenSnackDelete}
+        id={idToSendDelete}
+      />
+      <Snackbar open={opens} autoHideDuration={5000} onClose={handleCloseSnackbar}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Utilisateur ajouter avec succès
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openSnackDelete} autoHideDuration={5000} onClose={handleCloseSnackbarDelete}>
+        <Alert
+          onClose={handleCloseSnackbarDelete}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Utilisateur supprimer avec succès
+        </Alert>
+      </Snackbar>
       <Grid container spacing={2} className={classe.HeaderGridContainer}>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 3 }} className={classe.statGridItem}>
           <Box>
@@ -224,7 +276,7 @@ const Users = () => {
             <CardActionArea>
               <CardMedia
                 component="img"
-                image={UserInfo.image == null ? DefaultProfile : UserInfo.images}
+                image={UserInfo.images == null ? DefaultProfile : UserInfo.images}
                 alt={UserInfo.username}
                 sx={{
                   width: 120,
@@ -258,7 +310,13 @@ const Users = () => {
             <Button variant="contained" color="primary" startIcon={<FaEdit />} fullWidth>
               Modifier le profil
             </Button>
-            <Button variant="outlined" color="primary" startIcon={<FaPlusCircle />} fullWidth>
+            <Button
+              variant="outlined"
+              onClick={handleOpen}
+              color="primary"
+              startIcon={<FaPlusCircle />}
+              fullWidth
+            >
               Ajouter un utilisateur
             </Button>
           </Stack>
@@ -278,28 +336,36 @@ const Users = () => {
                     width: '100%'
                   }}
                 >
-                  <DataGrid
-                    rows={dataRow}
-                    columns={columns}
-                    initialState={{ pagination: { paginationModel } }}
-                    pageSizeOptions={[5, 10]}
-                    disableRowSelectionOnClick
-                    sx={{
-                      border: 'solid 1px #e0e0e0',
-                      width: 'auto', // Ensures the DataGrid takes full width
-                      height: '50%', // Ensures it grows to fit content
-                      minHeight: 400, // Minimum height for the DataGrid
-                      display: 'flex',
-                      justifyContent: 'center',
-                      '@media (max-width: 600px)': {
-                        width: '100%', // 100% width on small screens
-                        height: 'auto' // Allow height to grow with content
-                      }
-                    }}
-                    // slots={{ toolbar: GridToolbar }}
-                    showToolbar
-                    localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
-                  />
+                  {isPending ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <CircularProgress />
+                    </Box>
+                  ) : isError ? (
+                    <Alert severity="error">{error.message}</Alert>
+                  ) : (
+                    <DataGrid
+                      rows={dataRow}
+                      columns={columns}
+                      initialState={{ pagination: { paginationModel } }}
+                      pageSizeOptions={[5, 10]}
+                      disableRowSelectionOnClick
+                      sx={{
+                        border: 'solid 1px #e0e0e0',
+                        width: 'auto', // Ensures the DataGrid takes full width
+                        height: '50%', // Ensures it grows to fit content
+                        minHeight: 400, // Minimum height for the DataGrid
+                        display: 'flex',
+                        justifyContent: 'center',
+                        '@media (max-width: 600px)': {
+                          width: '100%', // 100% width on small screens
+                          height: 'auto' // Allow height to grow with content
+                        }
+                      }}
+                      // slots={{ toolbar: GridToolbar }}
+                      showToolbar
+                      localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+                    />
+                  )}
                 </div>
               </ThemeProvider>
             </CardContent>

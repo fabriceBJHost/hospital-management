@@ -12,14 +12,16 @@ const bcryptjs = require('bcryptjs')
  * @returns {Promise<Object>} Une promesse qui résout un objet contenant le résultat de l'insertion,
  * ou une erreur en cas d'échec.
  */
-const register = async (username, password, role) => {
-  const query = database.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)')
+const register = async (username, password, role, images) => {
+  const query = database.prepare(
+    'INSERT INTO users (username, password, role, images) VALUES (?, ?, ?, ?)'
+  )
   const saltRounds = 10
 
   try {
     let hashedPassword = await bcryptjs.hash(password, saltRounds)
 
-    let response = query.run(username, hashedPassword, role)
+    let response = query.run(username, hashedPassword, role, images)
 
     return response
   } catch (error) {

@@ -8,6 +8,7 @@ import { RouterProvider } from 'react-router-dom'
 import Router from './routes/Router'
 import { ContextProvider } from './context/AuthContext'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const theme = createTheme({
   typography: {
@@ -52,11 +53,15 @@ const theme = createTheme({
   }
 })
 
+const queryclient = new QueryClient()
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <ContextProvider>
-        <RouterProvider router={Router} />
+        <QueryClientProvider client={queryclient}>
+          <RouterProvider router={Router} />
+        </QueryClientProvider>
       </ContextProvider>
     </ThemeProvider>
   </StrictMode>

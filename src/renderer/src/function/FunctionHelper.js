@@ -1,39 +1,35 @@
 /**
- * Compress an image to approx. 240p height and return base64 string.
- * @param {File | Blob} imageFile - The image file to compress.
- * @param {number} targetHeight - Target height in pixels (e.g. 240).
- * @param {number} quality - Compression quality (0-1).
- * @returns {Promise<string>} - Resolves with base64 string of compressed image.
+ * Compress an image file to base64
+ * @param {File} file - The uploaded file (e.g. from input type="file")
+ * @param {number} targetWidth - The desired width
+ * @returns {Promise<string>} base64 string
  */
-export function compressImageToBase64(imageFile, targetHeight = 240, quality = 0.7) {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
+export const handleFileChange = (img_file, callback) => {
+  const reader = new FileReader()
+  reader.readAsDataURL(img_file)
 
-    img.onload = function () {
-      const aspectRatio = img.width / img.height
-      const targetWidth = targetHeight * aspectRatio
+  reader.onload = (ev) => {
+    const url = ev.target.result
+    // initialisation de nouvelle imageURL
+    const image = document.createElement('img')
+    image.src = url
 
-      const canvas = document.createElement('canvas')
-      canvas.width = targetWidth
-      canvas.height = targetHeight
+    // create a new image
+    image.onload = (event) => {
+      let canvas = document.createElement('canvas')
+      let ratio = 250 / event.target.width
+      canvas.width = 250
+      canvas.height = event.target.height * ratio
+      const context = canvas.getContext('2d')
+      context.drawImage(image, 0, 0, canvas.width, canvas.height)
 
-      const ctx = canvas.getContext('2d')
-      ctx.drawImage(img, 0, 0, targetWidth, targetHeight)
+      // new url
+      const new_URL = canvas.toDataURL('image/jpeg', 0.9)
 
-      // Adjust type if needed (e.g. 'image/jpeg' for better compression)
-      const dataUrl = canvas.toDataURL('image/jpeg', quality)
-
-      resolve(dataUrl)
+      // call the callback with base64 result
+      if (callback) {
+        callback(new_URL)
+      }
     }
-
-    img.onerror = reject
-
-    const reader = new FileReader()
-    reader.onload = function (e) {
-      img.src = e.target.result
-    }
-
-    reader.onerror = reject
-    reader.readAsDataURL(imageFile)
-  })
+  }
 }

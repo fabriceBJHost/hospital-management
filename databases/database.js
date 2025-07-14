@@ -134,11 +134,10 @@ const createWorkingDaysTableQuery = `
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     working_date TEXT NOT NULL,
     doctor_id INTEGER NOT NULL,
-    FOREIGN KEY (doctor_id) REFERENCES doctor(id),
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (doctor_id) REFERENCES doctor(id)
   );
-
 
 `
 database.prepare(createWorkingDaysTableQuery).run()
