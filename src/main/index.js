@@ -3,7 +3,13 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 const Store = require('electron-store').default
-const { login, register, deleteUsers } = require('../../databases/Models/Users')
+const {
+  login,
+  register,
+  deleteUsers,
+  getSingleUser,
+  updateUsers
+} = require('../../databases/Models/Users')
 
 /**
  * Initialize electron-store
@@ -191,6 +197,28 @@ ipcMain.handle('deleteUsers', async (event, request) => {
   const { id } = request
 
   const response = await deleteUsers(id)
+
+  return response
+})
+
+/**
+ * function to get single users
+ */
+ipcMain.handle('getSingleUser', async (event, request) => {
+  const { id } = request
+
+  const response = await getSingleUser(id)
+
+  return response
+})
+
+/**
+ * function to update users
+ */
+ipcMain.handle('updateUser', async (event, request) => {
+  const { username, password, role, image, id } = request
+
+  const response = await updateUsers(username, password, role, image, id)
 
   return response
 })

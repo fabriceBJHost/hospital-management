@@ -76,7 +76,7 @@ const getAll = () => {
 /**
  * function who delete one users
  * @param {Number} id
- * @returns
+ * @returns {Promise}
  */
 const deleteUsers = async (id) => {
   const query = database.prepare('DELETE FROM users WHERE id = ?')
@@ -90,9 +90,75 @@ const deleteUsers = async (id) => {
   }
 }
 
+/**
+ * function to get single user
+ * @param {Number} id
+ * @returns {Promise<Object>}
+ */
+const getSingleUser = async (id) => {
+  const query = database.prepare('SELECT * FROM users WHERE id = ?')
+
+  try {
+    let response = await query.get(id)
+
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+/**
+ * function to update users by id
+ * @param {String} username
+ * @param {String} password
+ * @param {String} role
+ * @param {String} images
+ * @param {Number} id
+ * @returns {Promise}
+ */
+const updateUsers = async (username, password, role, images, id) => {
+  try {
+    let sql
+    let params
+
+    if (password || password !== '') {
+      // Hash the password if it’s provided
+      const hashedPassword = await bcryptjs.hash(password, 10)
+
+      sql = `
+        UPDATE users
+        SET username = ?, password = ?, role = ?, images = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `
+
+      params = [username, hashedPassword, role, images, id]
+    } else {
+      // Don’t touch the password if not provided
+      sql = `
+        UPDATE users
+        SET username = ?, role = ?, images = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `
+
+      params = [username, role, images, id]
+    }
+
+    const query = database.prepare(sql)
+    let response = await query.run(...params)
+    const user = database.prepare('SELECT * FROM users WHERE id = ?')
+    response = await user.get(id)
+
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
 module.exports = {
   register,
   login,
   getAll,
-  deleteUsers
+  deleteUsers,
+  getSingleUser,
+  updateUsers
 }

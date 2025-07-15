@@ -50,3 +50,34 @@ export const addUsersValidation = (values) => {
 
   return errors
 }
+
+/**
+ * function who validate update users
+ * @param {Object} values
+ * @returns {Object}
+ */
+export const updateUsersValidation = (values) => {
+  const errors = {}
+
+  if (!values.username) {
+    errors.username = "Le nom d'utilisateur est requis"
+  } else if (values.username.length < 3) {
+    errors.username = "Le nom d'utilisateur doit comporter au moins 3 caractères"
+  }
+
+  if (values.password) {
+    if (values.password.length < 6) {
+      errors.password = 'Le mot de passe doit comporter au moins 6 caractères'
+    } else {
+      delete errors.password
+    }
+  } else {
+    delete errors.password
+  }
+
+  if (values.password !== values.passwordConfirmation) {
+    errors.passwordConfirmation = 'Le mot de passe ne correspond pas'
+  }
+
+  return errors
+}

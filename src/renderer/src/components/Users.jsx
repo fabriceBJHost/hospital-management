@@ -30,6 +30,7 @@ import { useQuery } from '@tanstack/react-query'
 import AddUsersModal from './Modals/AddUsersModal'
 import { useState } from 'react'
 import DeleteUsersModal from './Modals/DeleteUsersModal'
+import UpdateUsersModal from './Modals/UpdateUsersModal'
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
@@ -147,22 +148,6 @@ const Users = () => {
       renderCell: (params) => (
         <Stack direction={'row'} gap={2} justifyContent="center" alignItems="center">
           <Tooltips
-            title="Modifier l'utilisateur"
-            arrow
-            placement="right"
-            componentsProps={{
-              tooltip: {
-                sx: {
-                  fontSize: '13px'
-                }
-              }
-            }}
-          >
-            <IconButton color="primary">
-              <FaEdit />
-            </IconButton>
-          </Tooltips>
-          <Tooltips
             title="Supprimer l'utilisateur"
             arrow
             placement="right"
@@ -228,9 +213,44 @@ const Users = () => {
     setOpenSnackDelete(false)
   }
 
+  /**
+   * update function and props
+   */
+  const [openUpdateModal, setOpenUpdateModal] = useState(false)
+  const [idToSendUpdate, setIdToSendUpdate] = useState(null)
+  const openUpdateModalFunction = (id) => {
+    setIdToSendUpdate(id)
+    setOpenUpdateModal(true)
+  }
+  const handleCloseUpdateModal = () => setOpenUpdateModal(false)
+  const [openSnackbarUpdate, setOpenSnackbarUpdate] = useState(false)
+  const [openSnackbarUpdateError, setOpenSnackbarUpdateError] = useState(false)
+
+  const handleCloseSnackbarUpdate = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpenSnackbarUpdate(false)
+  }
+  const handleCloseSnackbarUpdateError = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpenSnackbarUpdateError(false)
+  }
+
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
       <AddUsersModal handleClose={handleClose} open={open} setOpenSnack={setOpenSnackBar} />
+      <UpdateUsersModal
+        handleClose={handleCloseUpdateModal}
+        open={openUpdateModal}
+        setOpenSnack={setOpenSnackbarUpdate}
+        id={idToSendUpdate}
+        setOpenSnackError={setOpenSnackbarUpdateError}
+      />
       <DeleteUsersModal
         handleClose={handleCloseDeleteModal}
         open={openDeleteModal}
@@ -255,6 +275,34 @@ const Users = () => {
           sx={{ width: '100%' }}
         >
           Utilisateur supprimer avec succès
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSnackbarUpdate}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbarUpdate}
+      >
+        <Alert
+          onClose={handleCloseSnackbarUpdate}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Utilisateur modifier avec succès
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSnackbarUpdateError}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbarUpdateError}
+      >
+        <Alert
+          onClose={handleCloseSnackbarUpdateError}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Erreur lors de la modification ou nom d&apos;utilisateur déjà pris!
         </Alert>
       </Snackbar>
       <Grid container spacing={2} className={classe.HeaderGridContainer}>
@@ -307,7 +355,13 @@ const Users = () => {
             Actions rapides
           </Typography>
           <Stack spacing={2}>
-            <Button variant="contained" color="primary" startIcon={<FaEdit />} fullWidth>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<FaEdit />}
+              fullWidth
+              onClick={() => openUpdateModalFunction(UserInfo.id)}
+            >
               Modifier le profil
             </Button>
             <Button

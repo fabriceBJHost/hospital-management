@@ -29,3 +29,25 @@ export const deleteUser = async (id) => {
 
   return response
 }
+
+/**
+ * function to get single users
+ * @param {Object} id
+ * @returns {Object}
+ */
+export const getSingleUser = async (id) => {
+  const response = await window.users.getSingleUser(id)
+
+  return response
+}
+
+/**
+ * function to update users
+ * @param {Object} formData
+ * @returns {Object}
+ */
+export const updateUser = async (formData) => {
+  const response = await window.users.updateUser(formData)
+
+  return response
+}

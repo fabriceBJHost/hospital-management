@@ -28,7 +28,9 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('users', {
       getUsers: () => getAll(),
       insertNewUser: (request) => ipcRenderer.invoke('register', request),
-      deleteUser: (request) => ipcRenderer.invoke('deleteUsers', request)
+      deleteUser: (request) => ipcRenderer.invoke('deleteUsers', request),
+      getSingleUser: (request) => ipcRenderer.invoke('getSingleUser', request),
+      updateUser: (request) => ipcRenderer.invoke('updateUser', request)
     })
   } catch (error) {
     console.error(error)
