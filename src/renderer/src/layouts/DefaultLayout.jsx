@@ -1,16 +1,18 @@
-import React from 'react'
-import { Outlet, Navigate } from 'react-router-dom'
+import { Outlet, Navigate, useNavigation } from 'react-router-dom'
 import Navigation from '../components/Navigation'
 import { useStateContext } from '../context/AuthContext'
+import Preload from '../components/Preload'
 
 const DefaultLayout = () => {
   const { token } = useStateContext()
+  const navigation = useNavigation()
 
   if (!token) {
     return <Navigate to={'/login'} />
   }
   return (
     <>
+      {navigation.state === 'loading' && <Preload />}
       <Navigation childrens={<Outlet />} />
     </>
   )

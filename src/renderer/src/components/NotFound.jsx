@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Typography, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,7 +20,7 @@ const NotFound = () => {
         404
       </Typography>
       <Typography variant="h5" gutterBottom>
-        Oups ! La page que vous recherchez n'existe pas.
+        Oups ! La page que vous recherchez n&apos;existe pas.
       </Typography>
       <Typography variant="body1" color="textSecondary" mb={4}>
         Il a peut-être été déplacé ou supprimé.
