@@ -2,7 +2,6 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-const Store = require('electron-store').default
 const {
   login,
   register,
@@ -13,10 +12,6 @@ const {
 const { insertDoctor, getSingleDoctor } = require('../../databases/Models/Doctors')
 const { getSingleWorkingDate, insertWorkingDays } = require('../../databases/Models/WorkingDay')
 
-/**
- * Initialize electron-store
- */
-const store = new Store() // ✅ only works if Store is a function
 let mainWindow
 
 function createWindow() {
@@ -163,22 +158,6 @@ ipcMain.handle('login', async (event, sessionData) => {
     // return the error object to renderer
     return { success: false, ...result }
   }
-})
-
-/**
- * Get session data
- * This can be used to retrieve session information anywhere in the app.
- */
-ipcMain.handle('get-session', () => {
-  return store.get('session')
-})
-
-/**
- * Clear session data
- * This can be used to clear session information, for example on logout.
- */
-ipcMain.handle('clear-session', () => {
-  store.delete('session')
 })
 
 /**

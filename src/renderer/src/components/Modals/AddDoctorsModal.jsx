@@ -27,6 +27,8 @@ import {
 import { handleFileChange } from '../../function/FunctionHelper'
 import classe from '../../assets/css/Users.module.css'
 import { validationAddDoctor } from '../../function/Validation'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { insertDoctor } from '../../function/Request'
 
 const AddDoctorsModal = ({ open, handleClose, setOpenSnack }) => {
   const [formData, setFormData] = useState({
@@ -91,12 +93,45 @@ const AddDoctorsModal = ({ open, handleClose, setOpenSnack }) => {
     setErrors(validationAddDoctor(formData))
   }, [formData])
 
+  const queryclient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: insertDoctor,
+    onSuccess: () => {
+      setOpenSnack(true)
+      handleClose(true)
+      queryclient.invalidateQueries({ queryKey: ['Doctors'] })
+      setFormData({
+        first_name: '',
+        last_name: '',
+        images: null,
+        image: null,
+        password: '',
+        specialization: '',
+        phone: '',
+        email: ''
+      })
+      setErrors({})
+      setTouchedFields({
+        first_name: false,
+        last_name: false,
+        password: false,
+        specialization: false,
+        phone: false,
+        email: false
+      })
+    },
+    onError: (err) => {
+      console.log(err)
+    }
+  })
+
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(formData)
 
     if (Object.keys(errors).length == 0) {
-      // mutation.mutate(formData)
+      mutation.mutate(formData)
     } else {
       setTouchedFields({
         first_name: true,
@@ -108,6 +143,7 @@ const AddDoctorsModal = ({ open, handleClose, setOpenSnack }) => {
       })
     }
   }
+
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle sx={{ color: 'primary.main' }}>

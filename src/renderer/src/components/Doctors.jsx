@@ -25,7 +25,7 @@ import { frFR } from '@mui/x-data-grid/locales'
 import { frFR as frFRDate } from '@mui/x-date-pickers/locales'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { DataGrid } from '@mui/x-data-grid'
-import { FaCalendarAlt, FaEdit, FaPlusCircle, FaTrashAlt } from 'react-icons/fa'
+import { FaCalendarAlt, FaPlusCircle, FaTrashAlt } from 'react-icons/fa'
 import 'dayjs/locale/fr'
 import { useQuery } from '@tanstack/react-query'
 import { getAllDoctors, getWorkingDate } from '../function/Request'
@@ -146,22 +146,6 @@ const Doctors = () => {
       align: 'center',
       renderCell: (params) => (
         <Stack direction={'row'} gap={2} justifyContent="center" alignItems="center">
-          <Tooltips
-            title="Modifier le docteur"
-            arrow
-            placement="right"
-            componentsProps={{
-              tooltip: {
-                sx: {
-                  fontSize: '13px'
-                }
-              }
-            }}
-          >
-            <IconButton color="primary">
-              <FaEdit />
-            </IconButton>
-          </Tooltips>
           <Tooltips
             title="Supprimer le docteur"
             arrow
