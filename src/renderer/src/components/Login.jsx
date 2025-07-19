@@ -70,7 +70,7 @@ const Login = () => {
         setUser(JSON.stringify(response.session.user))
         setToken(response.session.token)
         // Optionally redirect or show success message
-        navigate('/') // Redirect to dashboard or home page
+        navigate('/dashboard') // Redirect to dashboard or home page
       } else {
         setShowErrorModal(true)
       }

@@ -1,6 +1,6 @@
 /**
  * function to get all users
- * @returns {Object}
+ * @returns {Array}
  */
 export const getAllUsers = async () => {
   const users = await window.users.getUsers()
@@ -48,6 +48,48 @@ export const getSingleUser = async (id) => {
  */
 export const updateUser = async (formData) => {
   const response = await window.users.updateUser(formData)
+
+  return response
+}
+
+/**
+ * function to get all doctors
+ * @returns {Array}
+ */
+export const getAllDoctors = async () => {
+  const response = await window.doctors.getAllDoctor()
+
+  return response
+}
+
+/**
+ * function to insert doctor
+ * @param {Object} formData
+ * @returns {Object}
+ */
+export const insertDoctor = async (formData) => {
+  const response = await window.doctors.insertDoctor(formData)
+
+  return response
+}
+
+/**
+ * function to get Single doctor
+ * @param {Number} id
+ * @returns {Object}
+ */
+export const getSIngleDoctor = async (id) => {
+  const response = await window.doctors.getSingleDoctor(id)
+
+  return response
+}
+
+/**
+ * function to get all working date from server
+ * @returns {Array}
+ */
+export const getWorkingDate = async () => {
+  const response = await window.workDay.getAllWorkingDate()
 
   return response
 }

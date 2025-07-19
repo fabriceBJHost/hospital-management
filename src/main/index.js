@@ -10,6 +10,8 @@ const {
   getSingleUser,
   updateUsers
 } = require('../../databases/Models/Users')
+const { insertDoctor, getSingleDoctor } = require('../../databases/Models/Doctors')
+const { getSingleWorkingDate, insertWorkingDays } = require('../../databases/Models/WorkingDay')
 
 /**
  * Initialize electron-store
@@ -219,6 +221,58 @@ ipcMain.handle('updateUser', async (event, request) => {
   const { username, password, role, image, id } = request
 
   const response = await updateUsers(username, password, role, image, id)
+
+  return response
+})
+
+/**
+ * function to insert doctor
+ */
+ipcMain.handle('insertDoctor', async (event, request) => {
+  const { first_name, last_name, images, password, specialization, phone, email } = request
+
+  const response = await insertDoctor(
+    first_name,
+    last_name,
+    images,
+    password,
+    specialization,
+    phone,
+    email
+  )
+
+  return response
+})
+
+/**
+ * function to get single doctor
+ */
+ipcMain.handle('getSingleDoctor', async (event, request) => {
+  const { id } = request
+
+  const response = await getSingleDoctor(id)
+
+  return response
+})
+
+/**
+ * insert working date function
+ */
+ipcMain.handle('insertWorkingDate', async (event, request) => {
+  const { working_date, doctor_id } = request
+
+  const response = await insertWorkingDays(working_date, doctor_id)
+
+  return response
+})
+
+/**
+ * function to get single working date
+ */
+ipcMain.handle('getSingleWorkingDate', async (event, request) => {
+  const { id } = request
+
+  const response = await getSingleWorkingDate(id)
 
   return response
 })

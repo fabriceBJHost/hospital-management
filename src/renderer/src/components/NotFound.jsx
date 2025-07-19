@@ -25,7 +25,7 @@ const NotFound = () => {
       <Typography variant="body1" color="textSecondary" mb={4}>
         Il a peut-être été déplacé ou supprimé.
       </Typography>
-      <Button variant="contained" color="primary" onClick={() => navigate('/')}>
+      <Button variant="contained" color="primary" onClick={() => navigate('/dashboard')}>
         Retour sur Accueil
       </Button>
     </Box>

@@ -19,10 +19,20 @@ import Notification from '../components/Notification'
 const Router = createHashRouter([
   {
     path: '/',
-    element: <DefaultLayout />,
+    element: <AuthLayout />,
     children: [
       {
         path: '/',
+        element: <Login />
+      }
+    ]
+  },
+  {
+    path: '/',
+    element: <DefaultLayout />,
+    children: [
+      {
+        path: '/dashboard',
         element: <Dashboard />
       },
       {
@@ -56,16 +66,6 @@ const Router = createHashRouter([
       {
         path: '/notification',
         element: <Notification />
-      }
-    ]
-  },
-  {
-    path: '/',
-    element: <AuthLayout />,
-    children: [
-      {
-        path: '/login',
-        element: <Login />
       }
     ]
   },

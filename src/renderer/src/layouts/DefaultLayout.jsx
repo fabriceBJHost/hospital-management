@@ -8,7 +8,7 @@ const DefaultLayout = () => {
   const navigation = useNavigation()
 
   if (!token) {
-    return <Navigate to={'/login'} />
+    return <Navigate to={'/'} />
   }
   return (
     <>

@@ -6,7 +6,6 @@ import {
   Box,
   Toolbar,
   List,
-  CssBaseline,
   Typography,
   Divider,
   IconButton,
@@ -41,6 +40,7 @@ import { HiOutlineSquare2Stack } from 'react-icons/hi2'
 import { LiaTimesSolid } from 'react-icons/lia'
 import icon from '../assets/images/logo.png'
 import { useStateContext } from '../context/AuthContext'
+import PropTypes from 'prop-types'
 
 const drawerWidth = 230
 
@@ -303,10 +303,10 @@ const NavigationTest = ({ childrens }) => {
         {/* <Divider className={classe.divider} /> */}
         <List className={classe.drawer}>
           {/* dashboard link navigation */}
-          <Link className={classe.menu} to={'/'}>
+          <Link className={classe.menu} to={'/dashboard'}>
             <ListItem
               disablePadding
-              className={location.pathname == '/' && classe.menuActive}
+              className={location.pathname == '/dashboard' && classe.menuActive}
               sx={{ display: 'block' }}
             >
               <ListItemButton
@@ -314,7 +314,7 @@ const NavigationTest = ({ childrens }) => {
               >
                 <ListItemIcon className={open ? classe.iconOpen : classe.iconClosed}>
                   <MdDashboard
-                    className={location.pathname == '/' ? classe.iconActive : classe.icon}
+                    className={location.pathname == '/dashboard' ? classe.iconActive : classe.icon}
                   />
                 </ListItemIcon>
                 <ListItemText
@@ -549,6 +549,9 @@ const NavigationTest = ({ childrens }) => {
       </Box>
     </Box>
   )
+}
+NavigationTest.propTypes = {
+  childrens: PropTypes.node
 }
 
 export default NavigationTest

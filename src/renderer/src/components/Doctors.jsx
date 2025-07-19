@@ -10,7 +10,10 @@ import {
   CardContent,
   Tooltip as Tooltips,
   IconButton,
-  Button
+  Button,
+  CircularProgress,
+  Box,
+  Alert
 } from '@mui/material'
 import classe from '../assets/css/Doctor.module.css'
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
@@ -24,6 +27,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { DataGrid } from '@mui/x-data-grid'
 import { FaCalendarAlt, FaEdit, FaPlusCircle, FaTrashAlt } from 'react-icons/fa'
 import 'dayjs/locale/fr'
+import { useQuery } from '@tanstack/react-query'
+import { getAllDoctors, getWorkingDate } from '../function/Request'
+import AddDoctorsModal from './Modals/AddDoctorsModal'
 dayjs.locale('fr')
 
 const Doctors = () => {
@@ -39,191 +45,20 @@ const Doctors = () => {
     }
   })
 
-  const doctors = [
-    {
-      id: 1,
-      first_name: 'Alice',
-      last_name: 'Dupont',
-      images: 'alice.jpg',
-      specialization: 'Cardiologist',
-      phone: '0341234567',
-      email: 'alice.dupont@example.com',
-      created_at: '2025-07-14 09:00:00',
-      updated_at: '2025-07-14 09:00:00'
-    },
-    {
-      id: 2,
-      first_name: 'Jean',
-      last_name: 'Durand',
-      images: 'jean.jpg',
-      specialization: 'Cardiologist',
-      phone: '0341234568',
-      email: 'jean.durand@example.com',
-      created_at: '2025-07-14 09:10:00',
-      updated_at: '2025-07-14 09:10:00'
-    },
-    {
-      id: 3,
-      first_name: 'Claire',
-      last_name: 'Moreau',
-      images: 'claire.jpg',
-      specialization: 'Neurologist',
-      phone: '0341234569',
-      email: 'claire.moreau@example.com',
-      created_at: '2025-07-14 09:20:00',
-      updated_at: '2025-07-14 09:20:00'
-    },
-    {
-      id: 4,
-      first_name: 'Luc',
-      last_name: 'Bernard',
-      images: 'luc.jpg',
-      specialization: 'Neurologist',
-      phone: '0341234570',
-      email: 'luc.bernard@example.com',
-      created_at: '2025-07-14 09:30:00',
-      updated_at: '2025-07-14 09:30:00'
-    },
-    {
-      id: 5,
-      first_name: 'Sophie',
-      last_name: 'Petit',
-      images: 'sophie.jpg',
-      specialization: 'Psychiatrist',
-      phone: '0341234571',
-      email: 'sophie.petit@example.com',
-      created_at: '2025-07-14 09:40:00',
-      updated_at: '2025-07-14 09:40:00'
-    },
-    {
-      id: 6,
-      first_name: 'Thomas',
-      last_name: 'Robert',
-      images: 'thomas.jpg',
-      specialization: 'Radiologist',
-      phone: '0341234572',
-      email: 'thomas.robert@example.com',
-      created_at: '2025-07-14 09:50:00',
-      updated_at: '2025-07-14 09:50:00'
-    },
-    {
-      id: 7,
-      first_name: 'Emma',
-      last_name: 'Roux',
-      images: 'emma.jpg',
-      specialization: 'Gynecologist',
-      phone: '0341234573',
-      email: 'emma.roux@example.com',
-      created_at: '2025-07-14 10:00:00',
-      updated_at: '2025-07-14 10:00:00'
-    },
-    {
-      id: 8,
-      first_name: 'Hugo',
-      last_name: 'Lemoine',
-      images: 'hugo.jpg',
-      specialization: 'Psychiatrist',
-      phone: '0341234574',
-      email: 'hugo.lemoine@example.com',
-      created_at: '2025-07-14 10:10:00',
-      updated_at: '2025-07-14 10:10:00'
-    },
-    {
-      id: 9,
-      first_name: 'Camille',
-      last_name: 'Faure',
-      images: 'camille.jpg',
-      specialization: 'Endocrinologist',
-      phone: '0341234575',
-      email: 'camille.faure@example.com',
-      created_at: '2025-07-14 10:20:00',
-      updated_at: '2025-07-14 10:20:00'
-    },
-    {
-      id: 10,
-      first_name: 'Louis',
-      last_name: 'Garnier',
-      images: 'louis.jpg',
-      specialization: 'Orthopedic Surgeon',
-      phone: '0341234576',
-      email: 'louis.garnier@example.com',
-      created_at: '2025-07-14 10:30:00',
-      updated_at: '2025-07-14 10:30:00'
-    },
-    {
-      id: 11,
-      first_name: 'Julie',
-      last_name: 'Martinez',
-      images: 'julie.jpg',
-      specialization: 'Nephrologist',
-      phone: '0341234577',
-      email: 'julie.martinez@example.com',
-      created_at: '2025-07-14 10:40:00',
-      updated_at: '2025-07-14 10:40:00'
-    },
-    {
-      id: 12,
-      first_name: 'Mathieu',
-      last_name: 'Girard',
-      images: 'mathieu.jpg',
-      specialization: 'Nephrologist',
-      phone: '0341234578',
-      email: 'mathieu.girard@example.com',
-      created_at: '2025-07-14 10:50:00',
-      updated_at: '2025-07-14 10:50:00'
-    },
-    {
-      id: 13,
-      first_name: 'Laura',
-      last_name: 'Blanc',
-      images: 'laura.jpg',
-      specialization: 'Ophthalmologist',
-      phone: '0341234579',
-      email: 'laura.blanc@example.com',
-      created_at: '2025-07-14 11:00:00',
-      updated_at: '2025-07-14 11:00:00'
-    },
-    {
-      id: 14,
-      first_name: 'Nicolas',
-      last_name: 'Fontaine',
-      images: 'nicolas.jpg',
-      specialization: 'Urologist',
-      phone: '0341234580',
-      email: 'nicolas.fontaine@example.com',
-      created_at: '2025-07-14 11:10:00',
-      updated_at: '2025-07-14 11:10:00'
-    },
-    {
-      id: 15,
-      first_name: 'Marine',
-      last_name: 'Perrot',
-      images: 'marine.jpg',
-      specialization: 'Hematologist',
-      phone: '0341234581',
-      email: 'marine.perrot@example.com',
-      created_at: '2025-07-14 11:20:00',
-      updated_at: '2025-07-14 11:20:00'
-    }
-  ]
+  const {
+    data: doctors = [],
+    isPending,
+    isError,
+    error
+  } = useQuery({
+    queryKey: ['Doctors'],
+    queryFn: getAllDoctors
+  })
 
-  const workingDays = [
-    { id: 1, working_date: '2025-07-14', doctor_id: 1 },
-    { id: 2, working_date: '2025-07-14', doctor_id: 2 },
-    { id: 3, working_date: '2025-07-15', doctor_id: 3 },
-    { id: 4, working_date: '2025-07-15', doctor_id: 4 },
-    { id: 5, working_date: '2025-07-15', doctor_id: 5 },
-    { id: 6, working_date: '2025-07-15', doctor_id: 6 },
-    { id: 7, working_date: '2025-07-15', doctor_id: 7 },
-    { id: 8, working_date: '2025-07-17', doctor_id: 8 },
-    { id: 9, working_date: '2025-07-18', doctor_id: 9 },
-    { id: 10, working_date: '2025-07-18', doctor_id: 10 },
-    { id: 11, working_date: '2025-07-19', doctor_id: 11 },
-    { id: 12, working_date: '2025-07-19', doctor_id: 12 },
-    { id: 13, working_date: '2025-07-20', doctor_id: 13 },
-    { id: 14, working_date: '2025-07-20', doctor_id: 14 },
-    { id: 15, working_date: '2025-07-21', doctor_id: 15 }
-  ]
+  const { data: workingDays = [] } = useQuery({
+    queryKey: ['WorkingDay'],
+    queryFn: getWorkingDate
+  })
 
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [doctorsOnDate, setDoctorsOnDate] = useState([])
@@ -309,7 +144,7 @@ const Doctors = () => {
       minWidth: 150,
       headerAlign: 'center',
       align: 'center',
-      renderCell: ({ params }) => (
+      renderCell: (params) => (
         <Stack direction={'row'} gap={2} justifyContent="center" alignItems="center">
           <Tooltips
             title="Modifier le docteur"
@@ -357,11 +192,17 @@ const Doctors = () => {
     specialization: doc.specialization,
     phone: doc.phone,
     email: doc.email,
-    images: doc.images
+    images: doc.images,
+    action: doc.id
   }))
+
+  const [openModalAdd, setOpenModalAdd] = useState(false)
+  const handleOpenModalAdd = () => setOpenModalAdd(true)
+  const handleCloseModalAdd = () => setOpenModalAdd(false)
 
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
+      <AddDoctorsModal handleClose={handleCloseModalAdd} open={openModalAdd} />
       <Grid container spacing={2} className={classe.HeaderGridContainer}>
         <Grid size={{ xs: 12, sm: 12, md: 12, lg: 8 }} className={classe.statGridItem}>
           <LocalizationProvider
@@ -421,7 +262,13 @@ const Doctors = () => {
             Actions rapides
           </Typography>
           <Stack spacing={2}>
-            <Button variant="contained" color="primary" startIcon={<FaPlusCircle />} fullWidth>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<FaPlusCircle />}
+              fullWidth
+              onClick={handleOpenModalAdd}
+            >
               Ajouter un Médecin
             </Button>
             <Button variant="outlined" color="primary" startIcon={<FaCalendarAlt />} fullWidth>
@@ -443,28 +290,36 @@ const Doctors = () => {
                     width: '100%'
                   }}
                 >
-                  <DataGrid
-                    rows={dataRow}
-                    columns={columns}
-                    initialState={{ pagination: { paginationModel } }}
-                    pageSizeOptions={[5, 10]}
-                    disableRowSelectionOnClick
-                    sx={{
-                      border: 'solid 1px #e0e0e0',
-                      width: 'auto', // Ensures the DataGrid takes full width
-                      height: '50%', // Ensures it grows to fit content
-                      minHeight: 400, // Minimum height for the DataGrid
-                      display: 'flex',
-                      justifyContent: 'center',
-                      '@media (max-width: 600px)': {
-                        width: '100%', // 100% width on small screens
-                        height: 'auto' // Allow height to grow with content
-                      }
-                    }}
-                    // slots={{ toolbar: GridToolbar }}
-                    showToolbar
-                    localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
-                  />
+                  {isPending ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <CircularProgress />
+                    </Box>
+                  ) : isError ? (
+                    <Alert severity="error">{error.message}</Alert>
+                  ) : (
+                    <DataGrid
+                      rows={dataRow}
+                      columns={columns}
+                      initialState={{ pagination: { paginationModel } }}
+                      pageSizeOptions={[5, 10]}
+                      disableRowSelectionOnClick
+                      sx={{
+                        border: 'solid 1px #e0e0e0',
+                        width: 'auto', // Ensures the DataGrid takes full width
+                        height: '50%', // Ensures it grows to fit content
+                        minHeight: 400, // Minimum height for the DataGrid
+                        display: 'flex',
+                        justifyContent: 'center',
+                        '@media (max-width: 600px)': {
+                          width: '100%', // 100% width on small screens
+                          height: 'auto' // Allow height to grow with content
+                        }
+                      }}
+                      // slots={{ toolbar: GridToolbar }}
+                      showToolbar
+                      localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+                    />
+                  )}
                 </div>
               </ThemeProvider>
             </CardContent>

@@ -9,7 +9,7 @@ const AuthLayout = () => {
 
   // If token is present, redirect to home
   if (token) {
-    return <Navigate to={'/'} /> // Prevent rendering the layout
+    return <Navigate to={'/dashboard'} /> // Prevent rendering the layout
   }
 
   return (

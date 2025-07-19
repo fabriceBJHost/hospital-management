@@ -1,34 +1,43 @@
 import {
+  Avatar,
+  Box,
   Button,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
-  TextField,
-  MenuItem,
-  Stack,
-  InputAdornment,
+  DialogContent,
+  DialogTitle,
   Grid,
-  Avatar,
-  Box
+  InputAdornment,
+  Stack,
+  TextField
 } from '@mui/material'
-import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { FaEye, FaEyeSlash, FaImage, FaKey, FaLock, FaUser, FaUserShield } from 'react-icons/fa'
-import classe from '../../assets/css/Users.module.css'
-import { addUsersValidation } from '../../function/Validation'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { addNewUser } from '../../function/Request'
+import { useEffect, useState } from 'react'
+import {
+  FaAddressCard,
+  FaBriefcase,
+  FaEnvelope,
+  FaEye,
+  FaEyeSlash,
+  FaImage,
+  FaKey,
+  FaPhone,
+  FaUserMd
+} from 'react-icons/fa'
 import { handleFileChange } from '../../function/FunctionHelper'
+import classe from '../../assets/css/Users.module.css'
+import { validationAddDoctor } from '../../function/Validation'
 
-const AddUsersModal = ({ open, handleClose, setOpenSnack }) => {
+const AddDoctorsModal = ({ open, handleClose, setOpenSnack }) => {
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-    passwordConfirmation: '',
-    role: 'staff',
+    first_name: '',
+    last_name: '',
     images: null,
-    image: null
+    image: null,
+    password: '',
+    specialization: '',
+    phone: '',
+    email: ''
   })
 
   const handleChange = (e) => {
@@ -54,11 +63,19 @@ const AddUsersModal = ({ open, handleClose, setOpenSnack }) => {
     }
   }
 
+  const [seePassword, setSeePassword] = useState(false)
+  const togglePasswordVisibility = () => {
+    setSeePassword(!seePassword)
+  }
+
   const [errors, setErrors] = useState({})
   const [touchedFields, setTouchedFields] = useState({
-    username: false,
+    first_name: false,
+    last_name: false,
     password: false,
-    passwordConfirmation: false
+    specialization: false,
+    phone: false,
+    email: false
   })
 
   const handleInput = (e) => {
@@ -71,61 +88,31 @@ const AddUsersModal = ({ open, handleClose, setOpenSnack }) => {
   }
 
   useEffect(() => {
-    setErrors(addUsersValidation(formData))
+    setErrors(validationAddDoctor(formData))
   }, [formData])
-
-  const queryclient = useQueryClient()
-
-  const mutation = useMutation({
-    mutationFn: addNewUser,
-    onSuccess: () => {
-      setOpenSnack(true)
-      handleClose(true)
-      queryclient.invalidateQueries({ queryKey: ['Users'] })
-      setFormData({
-        username: '',
-        password: '',
-        passwordConfirmation: '',
-        role: 'staff',
-        images: null,
-        image: null
-      })
-      setErrors({})
-      setTouchedFields({
-        username: false,
-        password: false,
-        passwordConfirmation: false
-      })
-    },
-    onError: (err) => {
-      console.log(err)
-    }
-  })
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(formData)
 
     if (Object.keys(errors).length == 0) {
-      mutation.mutate(formData)
+      // mutation.mutate(formData)
     } else {
       setTouchedFields({
-        username: true,
+        first_name: true,
+        last_name: true,
         password: true,
-        passwordConfirmation: true
+        specialization: true,
+        phone: true,
+        email: true
       })
     }
   }
-
-  const [seePassword, setSeePassword] = useState(false)
-  const togglePasswordVisibility = () => {
-    setSeePassword(!seePassword)
-  }
-
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle sx={{ color: 'primary.main' }}>
         <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} gap={2}>
-          <FaUser /> Ajouter une nouvelle Utilisateur
+          <FaUserMd /> Ajouter une nouveau Médecin
         </Stack>
       </DialogTitle>
       <DialogContent>
@@ -153,24 +140,24 @@ const AddUsersModal = ({ open, handleClose, setOpenSnack }) => {
         <Grid container spacing={2}>
           <Grid size={6}>
             <TextField
-              label="Username"
-              name="username"
+              label="Nom"
+              name="last_name"
               margin="dense"
-              error={touchedFields.username && Boolean(errors.username)}
-              helperText={touchedFields.username && errors.username ? errors.username : ''}
-              value={formData.username}
+              error={touchedFields.last_name && Boolean(errors.last_name)}
+              helperText={touchedFields.last_name && errors.last_name ? errors.last_name : ''}
+              value={formData.last_name}
               onChange={(e) => {
                 handleChange(e)
                 handleInput(e)
               }}
               fullWidth
-              placeholder="Entrer le nom d'utilisateur"
+              placeholder="Entrer le nom"
               required
               slotProps={{
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">
-                      <FaUser className={classe.iconStarter} />
+                      <FaUserMd className={classe.iconStarter} />
                     </InputAdornment>
                   )
                 }
@@ -192,18 +179,24 @@ const AddUsersModal = ({ open, handleClose, setOpenSnack }) => {
           </Grid>
           <Grid size={6}>
             <TextField
-              select
-              label="Rôle"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              fullWidth
+              label="Prénom"
+              name="first_name"
               margin="dense"
+              error={touchedFields.first_name && Boolean(errors.first_name)}
+              helperText={touchedFields.first_name && errors.first_name ? errors.first_name : ''}
+              value={formData.first_name}
+              onChange={(e) => {
+                handleChange(e)
+                handleInput(e)
+              }}
+              fullWidth
+              placeholder="Entrer le prénom"
+              required
               slotProps={{
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">
-                      <FaUserShield className={classe.iconStarter} />
+                      <FaAddressCard className={classe.iconStarter} />
                     </InputAdornment>
                   )
                 }
@@ -221,26 +214,143 @@ const AddUsersModal = ({ open, handleClose, setOpenSnack }) => {
                   }
                 }
               }}
-            >
-              <MenuItem value="staff">Staff</MenuItem>
-              <MenuItem value="admin">Admin</MenuItem>
-            </TextField>
+            />
           </Grid>
           <Grid size={6}>
             <TextField
-              label="Mot de passe"
-              name="password"
-              type={seePassword ? 'text' : 'password'}
+              label="Spécialization"
+              name="specialization"
               margin="dense"
-              value={formData.password}
-              error={touchedFields.password && Boolean(errors.password)}
-              helperText={touchedFields.password && errors.password ? errors.password : ''}
+              error={touchedFields.specialization && Boolean(errors.specialization)}
+              helperText={
+                touchedFields.specialization && errors.specialization ? errors.specialization : ''
+              }
+              value={formData.specialization}
               onChange={(e) => {
                 handleChange(e)
                 handleInput(e)
               }}
               fullWidth
-              placeholder="Entrer le mot de passe"
+              placeholder="Entrer la spécialiter"
+              required
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FaBriefcase className={classe.iconStarter} />
+                    </InputAdornment>
+                  )
+                }
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'primary.main'
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'primary.main'
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main'
+                  }
+                }
+              }}
+            />
+          </Grid>
+          <Grid size={6}>
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              margin="dense"
+              error={touchedFields.email && Boolean(errors.email)}
+              helperText={touchedFields.email && errors.email ? errors.email : ''}
+              value={formData.email}
+              onChange={(e) => {
+                handleChange(e)
+                handleInput(e)
+              }}
+              fullWidth
+              placeholder="Entrer l'Email"
+              required
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FaEnvelope className={classe.iconStarter} />
+                    </InputAdornment>
+                  )
+                }
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'primary.main'
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'primary.main'
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main'
+                  }
+                }
+              }}
+            />
+          </Grid>
+          <Grid size={6}>
+            <TextField
+              label="Téléphone"
+              name="phone"
+              margin="dense"
+              error={touchedFields.phone && Boolean(errors.phone)}
+              helperText={touchedFields.phone && errors.phone ? errors.phone : ''}
+              value={formData.phone}
+              onChange={(e) => {
+                handleChange(e)
+                handleInput(e)
+              }}
+              fullWidth
+              placeholder="Entrer le contact"
+              required
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FaPhone className={classe.iconStarter} />
+                    </InputAdornment>
+                  )
+                }
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'primary.main'
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'primary.main'
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main'
+                  }
+                }
+              }}
+            />
+          </Grid>
+          <Grid size={6}>
+            <TextField
+              label="Mot de Passe"
+              name="password"
+              margin="dense"
+              error={touchedFields.password && Boolean(errors.password)}
+              helperText={touchedFields.password && errors.password ? errors.password : ''}
+              value={formData.password}
+              onChange={(e) => {
+                handleChange(e)
+                handleInput(e)
+              }}
+              fullWidth
+              type={seePassword ? 'text' : 'password'}
+              placeholder="Entrer le Mot de passe"
               required
               slotProps={{
                 input: {
@@ -256,50 +366,6 @@ const AddUsersModal = ({ open, handleClose, setOpenSnack }) => {
                       ) : (
                         <FaEye onClick={togglePasswordVisibility} className={classe.icon} />
                       )}
-                    </InputAdornment>
-                  )
-                }
-              }}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: 'primary.main'
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'primary.main'
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'primary.main'
-                  }
-                }
-              }}
-            />
-          </Grid>
-          <Grid size={6}>
-            <TextField
-              label="Mot de passe de Confirmation"
-              name="passwordConfirmation"
-              type="password"
-              margin="dense"
-              value={formData.passwordConfirmation}
-              error={touchedFields.passwordConfirmation && Boolean(errors.passwordConfirmation)}
-              helperText={
-                touchedFields.passwordConfirmation && errors.passwordConfirmation
-                  ? errors.passwordConfirmation
-                  : ''
-              }
-              onChange={(e) => {
-                handleChange(e)
-                handleInput(e)
-              }}
-              fullWidth
-              placeholder="Confirmez le mot de passe"
-              required
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <FaLock className={classe.iconStarter} />
                     </InputAdornment>
                   )
                 }
@@ -335,10 +401,10 @@ const AddUsersModal = ({ open, handleClose, setOpenSnack }) => {
     </Dialog>
   )
 }
-AddUsersModal.propTypes = {
+AddDoctorsModal.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   setOpenSnack: PropTypes.func.isRequired
 }
 
-export default AddUsersModal
+export default AddDoctorsModal

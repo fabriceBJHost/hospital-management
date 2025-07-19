@@ -37,9 +37,10 @@ const createDoctorTableQuery = `
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     images TEXT DEFAULT NULL,
+    password TEXT NOT NULL,
     specialization TEXT,
     phone TEXT,
-    email TEXT,
+    email VARCHHAR(300) UNIQUE NOT NULL,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP
   );
