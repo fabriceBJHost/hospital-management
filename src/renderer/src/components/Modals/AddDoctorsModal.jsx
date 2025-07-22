@@ -30,7 +30,7 @@ import { validationAddDoctor } from '../../function/Validation'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { insertDoctor } from '../../function/Request'
 
-const AddDoctorsModal = ({ open, handleClose, setOpenSnack }) => {
+const AddDoctorsModal = ({ open, handleClose, setOpenSnack, setOpenSnackError }) => {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -97,38 +97,48 @@ const AddDoctorsModal = ({ open, handleClose, setOpenSnack }) => {
 
   const mutation = useMutation({
     mutationFn: insertDoctor,
-    onSuccess: () => {
-      setOpenSnack(true)
-      handleClose(true)
-      queryclient.invalidateQueries({ queryKey: ['Doctors'] })
-      setFormData({
-        first_name: '',
-        last_name: '',
-        images: null,
-        image: null,
-        password: '',
-        specialization: '',
-        phone: '',
-        email: ''
-      })
-      setErrors({})
-      setTouchedFields({
-        first_name: false,
-        last_name: false,
-        password: false,
-        specialization: false,
-        phone: false,
-        email: false
-      })
+    onSuccess: (data) => {
+      if (data && data.changes) {
+        setOpenSnack(true)
+        handleClose(true)
+        queryclient.invalidateQueries({ queryKey: ['Doctors'] })
+        setFormData({
+          first_name: '',
+          last_name: '',
+          images: null,
+          image: null,
+          password: '',
+          specialization: '',
+          phone: '',
+          email: ''
+        })
+        setErrors({})
+        setTouchedFields({
+          first_name: false,
+          last_name: false,
+          password: false,
+          specialization: false,
+          phone: false,
+          email: false
+        })
+      } else if (data && data.code) {
+        errors.email = 'Email doit être unique'
+        setOpenSnackError(true)
+        setTouchedFields((prev) => ({
+          ...prev,
+          email: true
+        }))
+      } else {
+        setOpenSnackError(true)
+      }
     },
-    onError: (err) => {
-      console.log(err)
+    onError: () => {
+      setOpenSnackError(true)
     }
   })
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(formData)
 
     if (Object.keys(errors).length == 0) {
       mutation.mutate(formData)
@@ -440,7 +450,8 @@ const AddDoctorsModal = ({ open, handleClose, setOpenSnack }) => {
 AddDoctorsModal.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  setOpenSnack: PropTypes.func.isRequired
+  setOpenSnack: PropTypes.func.isRequired,
+  setOpenSnackError: PropTypes.func.isRequired
 }
 
 export default AddDoctorsModal

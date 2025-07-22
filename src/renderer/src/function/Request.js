@@ -85,6 +85,17 @@ export const getSIngleDoctor = async (id) => {
 }
 
 /**
+ * function to delete doctor
+ * @param {Number} id
+ * @returns {Object}
+ */
+export const deleteDoctor = async (id) => {
+  const response = await window.doctors.deleteDoctor(id)
+
+  return response
+}
+
+/**
  * function to get all working date from server
  * @returns {Array}
  */

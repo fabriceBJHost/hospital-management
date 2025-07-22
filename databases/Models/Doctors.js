@@ -1,4 +1,5 @@
 const { database } = require('../database')
+const bcryptjs = require('bcryptjs')
 
 /**
  * function to insert doctor in database
@@ -25,11 +26,13 @@ const insertDoctor = async (
   )
 
   try {
+    let hashedPassword = await bcryptjs.hash(password, 10)
+
     let response = await query.run(
       first_name,
       last_name,
       images,
-      password,
+      hashedPassword,
       specialization,
       phone,
       email
@@ -74,8 +77,26 @@ const getSingleDoctor = async (id) => {
   }
 }
 
+/**
+ * function to delete doctor
+ * @param {Number} id
+ * @returns {Promise}
+ */
+const deleteDoctor = async (id) => {
+  const query = database.prepare('DELETE FROM doctor WHERE id = ?')
+
+  try {
+    let response = await query.run(id)
+
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
 module.exports = {
   insertDoctor,
   getDoctors,
-  getSingleDoctor
+  getSingleDoctor,
+  deleteDoctor
 }

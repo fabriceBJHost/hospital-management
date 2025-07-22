@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 const { getAll } = require('../../databases/Models/Users')
 const { getDoctors } = require('../../databases/Models/Doctors')
 const { getWorkingDate } = require('../../databases/Models/WorkingDay')
+const { executeFacker } = require('../../databases/Fackers/FackerData')
 
 // Custom APIs for renderer
 const api = {}
@@ -17,7 +18,7 @@ if (process.contextIsolated) {
 
     contextBridge.exposeInMainWorld('session', {
       setSession: (sessionData) => ipcRenderer.invoke('login', sessionData),
-      getSession: () => ipcRenderer.invoke('get-session')
+      facker: () => executeFacker()
     })
 
     /**
@@ -47,7 +48,8 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('doctors', {
       getAllDoctor: () => getDoctors(),
       insertDoctor: (request) => ipcRenderer.invoke('insertDoctor', request),
-      getSingleDoctor: (request) => ipcRenderer.invoke('getSingleDoctor', request)
+      getSingleDoctor: (request) => ipcRenderer.invoke('getSingleDoctor', request),
+      deleteDoctor: (request) => ipcRenderer.invoke('deleteDoctor', request)
     })
 
     /**

@@ -30,6 +30,8 @@ import 'dayjs/locale/fr'
 import { useQuery } from '@tanstack/react-query'
 import { getAllDoctors, getWorkingDate } from '../function/Request'
 import AddDoctorsModal from './Modals/AddDoctorsModal'
+import DoctorToast from './Modals/DoctorToast'
+import DeleteUsersModal from './Modals/DeleteDoctorModal'
 dayjs.locale('fr')
 
 const Doctors = () => {
@@ -133,7 +135,11 @@ const Doctors = () => {
         <Avatar
           src={params.value}
           alt={params.row.username}
-          sx={{ width: 50, height: 50, border: '2px solid #e0e0e0', padding: '3px' }}
+          sx={{
+            width: 50,
+            height: 50,
+            border: '2px solid #e0e0e0'
+          }}
         />
       )
     },
@@ -158,7 +164,7 @@ const Doctors = () => {
               }
             }}
           >
-            <IconButton color="error">
+            <IconButton color="error" onClick={() => handleOpenModalDelete(params.value)}>
               <FaTrashAlt />
             </IconButton>
           </Tooltips>
@@ -180,13 +186,57 @@ const Doctors = () => {
     action: doc.id
   }))
 
+  /**
+   * open the modal and toest on add
+   */
   const [openModalAdd, setOpenModalAdd] = useState(false)
   const handleOpenModalAdd = () => setOpenModalAdd(true)
   const handleCloseModalAdd = () => setOpenModalAdd(false)
 
+  const [openSnackbarAdd, setOpenSnackbarAdd] = useState(false)
+  const handleCloseSnackbarAdd = () => setOpenSnackbarAdd(false)
+  const handleOpenSnackbarAdd = () => setOpenSnackbarAdd(true)
+  const [openSnackbarAddError, setOpenSnackbarAddError] = useState(false)
+  const handleCloseSnackbarAddError = () => setOpenSnackbarAddError(false)
+  const handleOpenSnackbarAddError = () => setOpenSnackbarAddError(true)
+
+  /**
+   * open themodal and toast on delete
+   */
+  const [openModalDelete, setOpenModalDelete] = useState(false)
+  const [idToSendDelete, setIdToSendDelete] = useState(null)
+  const handleOpenModalDelete = (id) => {
+    setIdToSendDelete(id)
+    setOpenModalDelete(true)
+  }
+  const handleCloseModalDelete = () => setOpenModalDelete(false)
+
+  const [openSnackbarDelete, setOpenSnackbarDelete] = useState(false)
+  const handleCloseSnackbarDelete = () => setOpenSnackbarDelete(false)
+  const handleOpenSnackbarDelete = () => setOpenSnackbarDelete(true)
+
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
-      <AddDoctorsModal handleClose={handleCloseModalAdd} open={openModalAdd} />
+      <AddDoctorsModal
+        handleClose={handleCloseModalAdd}
+        open={openModalAdd}
+        setOpenSnack={handleOpenSnackbarAdd}
+        setOpenSnackError={handleOpenSnackbarAddError}
+      />
+      <DeleteUsersModal
+        handleClose={handleCloseModalDelete}
+        id={idToSendDelete}
+        open={openModalDelete}
+        setOpenSnackDelete={handleOpenSnackbarDelete}
+      />
+      <DoctorToast
+        handleCloseSnackbarAdd={handleCloseSnackbarAdd}
+        handleCloseSnackbarAddError={handleCloseSnackbarAddError}
+        openSnackbarAdd={openSnackbarAdd}
+        openSnackbarAddError={openSnackbarAddError}
+        handleCloseSnackbarDelete={handleCloseSnackbarDelete}
+        openSnackbarDelete={openSnackbarDelete}
+      />
       <Grid container spacing={2} className={classe.HeaderGridContainer}>
         <Grid size={{ xs: 12, sm: 12, md: 12, lg: 8 }} className={classe.statGridItem}>
           <LocalizationProvider

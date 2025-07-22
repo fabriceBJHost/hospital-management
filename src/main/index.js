@@ -9,7 +9,7 @@ const {
   getSingleUser,
   updateUsers
 } = require('../../databases/Models/Users')
-const { insertDoctor, getSingleDoctor } = require('../../databases/Models/Doctors')
+const { insertDoctor, getSingleDoctor, deleteDoctor } = require('../../databases/Models/Doctors')
 const { getSingleWorkingDate, insertWorkingDays } = require('../../databases/Models/WorkingDay')
 
 let mainWindow
@@ -208,12 +208,12 @@ ipcMain.handle('updateUser', async (event, request) => {
  * function to insert doctor
  */
 ipcMain.handle('insertDoctor', async (event, request) => {
-  const { first_name, last_name, images, password, specialization, phone, email } = request
+  const { first_name, last_name, image, password, specialization, phone, email } = request
 
   const response = await insertDoctor(
     first_name,
     last_name,
-    images,
+    image,
     password,
     specialization,
     phone,
@@ -230,6 +230,17 @@ ipcMain.handle('getSingleDoctor', async (event, request) => {
   const { id } = request
 
   const response = await getSingleDoctor(id)
+
+  return response
+})
+
+/**
+ * function to delete doctor
+ */
+ipcMain.handle('deleteDoctor', async (event, request) => {
+  const { id } = request
+
+  const response = await deleteDoctor(id)
 
   return response
 })
