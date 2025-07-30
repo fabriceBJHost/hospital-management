@@ -5,7 +5,7 @@
 export const getAllUsers = async () => {
   const users = await window.users.getUsers()
 
-  return users
+  return users?.data
 }
 
 /**
@@ -38,7 +38,7 @@ export const deleteUser = async (id) => {
 export const getSingleUser = async (id) => {
   const response = await window.users.getSingleUser(id)
 
-  return response
+  return response?.data
 }
 
 /**
@@ -59,7 +59,7 @@ export const updateUser = async (formData) => {
 export const getAllDoctors = async () => {
   const response = await window.doctors.getAllDoctor()
 
-  return response
+  return response?.data
 }
 
 /**

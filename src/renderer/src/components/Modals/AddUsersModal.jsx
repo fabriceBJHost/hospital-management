@@ -78,24 +78,32 @@ const AddUsersModal = ({ open, handleClose, setOpenSnack }) => {
 
   const mutation = useMutation({
     mutationFn: addNewUser,
-    onSuccess: () => {
-      setOpenSnack(true)
-      handleClose(true)
-      queryclient.invalidateQueries({ queryKey: ['Users'] })
-      setFormData({
-        username: '',
-        password: '',
-        passwordConfirmation: '',
-        role: 'staff',
-        images: null,
-        image: null
-      })
-      setErrors({})
-      setTouchedFields({
-        username: false,
-        password: false,
-        passwordConfirmation: false
-      })
+    onSuccess: (data) => {
+      if (!data.success) {
+        errors.username = "Nom d'utilisateur doit être unique"
+        setTouchedFields((prev) => ({
+          ...prev,
+          username: true
+        }))
+      } else {
+        setOpenSnack(true)
+        handleClose(true)
+        queryclient.invalidateQueries({ queryKey: ['Users'] })
+        setFormData({
+          username: '',
+          password: '',
+          passwordConfirmation: '',
+          role: 'staff',
+          images: null,
+          image: null
+        })
+        setErrors({})
+        setTouchedFields({
+          username: false,
+          password: false,
+          passwordConfirmation: false
+        })
+      }
     },
     onError: (err) => {
       console.log(err)

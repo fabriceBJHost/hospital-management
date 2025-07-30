@@ -109,13 +109,15 @@ const UpdateUsersModal = ({ open, handleClose, setOpenSnack, id, setOpenSnackErr
   const mutation = useMutation({
     mutationFn: updateUser,
     onSuccess: (data) => {
-      if (data && data.code) {
+      if (data && !data.success) {
         setOpenSnackError(true)
       } else {
         setOpenSnack(true)
         handleClose(true)
         queryclient.invalidateQueries({ queryKey: ['Users'] })
-        setUser(JSON.stringify(data))
+        let users = data.data
+        delete users.password
+        setUser(JSON.stringify(users))
         setErrors({})
         setTouchedFields({
           username: false,

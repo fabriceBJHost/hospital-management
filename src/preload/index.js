@@ -1,7 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-const { getAll } = require('../../databases/Models/Users')
-const { getDoctors } = require('../../databases/Models/Doctors')
 const { getWorkingDate } = require('../../databases/Models/WorkingDay')
 const { executeFacker } = require('../../databases/Fackers/FackerData')
 
@@ -35,7 +33,7 @@ if (process.contextIsolated) {
      * API for all users
      */
     contextBridge.exposeInMainWorld('users', {
-      getUsers: () => getAll(),
+      getUsers: () => ipcRenderer.invoke('getUsers'),
       insertNewUser: (request) => ipcRenderer.invoke('register', request),
       deleteUser: (request) => ipcRenderer.invoke('deleteUsers', request),
       getSingleUser: (request) => ipcRenderer.invoke('getSingleUser', request),
@@ -46,7 +44,7 @@ if (process.contextIsolated) {
      * API for all doctors
      */
     contextBridge.exposeInMainWorld('doctors', {
-      getAllDoctor: () => getDoctors(),
+      getAllDoctor: () => ipcRenderer.invoke('getAllDoctor'),
       insertDoctor: (request) => ipcRenderer.invoke('insertDoctor', request),
       getSingleDoctor: (request) => ipcRenderer.invoke('getSingleDoctor', request),
       deleteDoctor: (request) => ipcRenderer.invoke('deleteDoctor', request)

@@ -7,10 +7,22 @@ const {
   register,
   deleteUsers,
   getSingleUser,
-  updateUsers
+  updateUsers,
+  getAll
 } = require('../../databases/Models/Users')
-const { insertDoctor, getSingleDoctor, deleteDoctor } = require('../../databases/Models/Doctors')
+const { setupDatabase } = require('../../databases/database')
+const {
+  insertDoctor,
+  getSingleDoctor,
+  deleteDoctor,
+  getDoctors
+} = require('../../databases/Models/Doctors')
 const { getSingleWorkingDate, insertWorkingDays } = require('../../databases/Models/WorkingDay')
+
+/**
+ * creating all table if not exists
+ */
+setupDatabase().catch(console.error)
 
 let mainWindow
 
@@ -172,6 +184,15 @@ ipcMain.handle('register', async (event, request) => {
 })
 
 /**
+ * function to get all users
+ */
+ipcMain.handle('getUsers', async () => {
+  const response = await getAll()
+
+  return response
+})
+
+/**
  * function to delete user
  */
 ipcMain.handle('deleteUsers', async (event, request) => {
@@ -200,6 +221,15 @@ ipcMain.handle('updateUser', async (event, request) => {
   const { username, password, role, image, id } = request
 
   const response = await updateUsers(username, password, role, image, id)
+
+  return response
+})
+
+/**
+ * function to get all doctors
+ */
+ipcMain.handle('getAllDoctor', async () => {
+  const response = await getDoctors()
 
   return response
 })

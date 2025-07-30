@@ -1,161 +1,167 @@
-const sqlite = require('better-sqlite3')
-// const path = require('path')
+const mysql = require('mysql2/promise')
 const bcrypt = require('bcryptjs')
 
-const database = new sqlite('./hospital.db')
+// Create a connection pool
+const database = mysql.createPool({
+  host: '127.0.0.1',
+  user: 'root',
+  password: '',
+  database: 'hospital',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+})
 
-/**
- * create patient table if not exist in database
- */
-const createPatientTableQuery = `
+async function setupDatabase() {
+  // Table: patients
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS patients (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      first_name VARCHAR(255) NOT NULL,
+      last_name VARCHAR(255) NOT NULL,
+      gender VARCHAR(10) NOT NULL,
+      birth_date DATE NOT NULL,
+      phone VARCHAR(50),
+      email VARCHAR(255),
+      address TEXT,
+      is_hospitalized BOOLEAN DEFAULT FALSE,
+      images TEXT DEFAULT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+  `)
 
-  CREATE TABLE IF NOT EXISTS patients (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    gender TEXT NOT NULL,
-    birth_date DATE NOT NULL,
-    phone TEXT,
-    email TEXT,
-    address TEXT,
-    is_hospitalized BOOLEAN DEFAULT FALSE,
-    images TEXT DEFAULT NULL,
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-  );
+  // Table: doctor
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS doctor (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      first_name VARCHAR(255) NOT NULL,
+      last_name VARCHAR(255) NOT NULL,
+      images TEXT DEFAULT NULL,
+      password TEXT NOT NULL,
+      specialization VARCHAR(255),
+      phone VARCHAR(50),
+      email VARCHAR(300) UNIQUE NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+  `)
 
-`
-database.prepare(createPatientTableQuery).run()
+  // Table: appointments
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS appointments (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      patient_id INT NOT NULL,
+      doctor_id INT NOT NULL,
+      appointment_date DATETIME NOT NULL,
+      reason TEXT,
+      status VARCHAR(50) DEFAULT 'Scheduled',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      FOREIGN KEY (patient_id) REFERENCES patients(id),
+      FOREIGN KEY (doctor_id) REFERENCES doctor(id)
+    );
+  `)
 
-/**
- * create table doctor
- */
-const createDoctorTableQuery = `
+  // Table: medical_records
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS medical_records (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      patient_id INT NOT NULL,
+      doctor_id INT,
+      diagnosis TEXT,
+      treatment TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      FOREIGN KEY (patient_id) REFERENCES patients(id),
+      FOREIGN KEY (doctor_id) REFERENCES doctor(id)
+    );
+  `)
 
-  CREATE TABLE IF NOT EXISTS doctor (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    images TEXT DEFAULT NULL,
-    password TEXT NOT NULL,
-    specialization TEXT,
-    phone TEXT,
-    email VARCHHAR(300) UNIQUE NOT NULL,
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-  );
+  // Table: users
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(255) UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      role VARCHAR(50) DEFAULT 'staff',
+      images TEXT DEFAULT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+  `)
 
-`
-database.prepare(createDoctorTableQuery).run()
+  // Table: prescriptions
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS prescriptions (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      medical_record_id INT NOT NULL,
+      medication_name VARCHAR(255) NOT NULL,
+      dosage VARCHAR(255),
+      duration VARCHAR(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      FOREIGN KEY (medical_record_id) REFERENCES medical_records(id)
+    );
+  `)
 
-/**
- * create appointment table
- */
-const createAppointmentTableQuery = `
+  // Table: working_day
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS working_day (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      working_date DATE NOT NULL,
+      doctor_id INT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      FOREIGN KEY (doctor_id) REFERENCES doctor(id)
+    );
+  `)
 
-  CREATE TABLE IF NOT EXISTS appointments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    patient_id INTEGER NOT NULL,
-    doctor_id INTEGER NOT NULL,
-    appointment_date TEXT NOT NULL,
-    reason TEXT,
-    status TEXT DEFAULT 'Scheduled',
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (patient_id) REFERENCES patients(id),
-    FOREIGN KEY (doctor_id) REFERENCES doctors(id)
-  );
+  // Table: rooms
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS rooms (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      type VARCHAR(100) NOT NULL,
+      floor INT NOT NULL,
+      building VARCHAR(100),
+      status VARCHAR(50) DEFAULT 'available',
+      features TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+  `)
 
-`
-database.prepare(createAppointmentTableQuery).run()
+  // Table: bedrooms
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS bedrooms (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      room_id INT NOT NULL,
+      bed_number VARCHAR(50) NOT NULL,
+      status VARCHAR(50) DEFAULT 'vacant',
+      assigned_patient_id INT DEFAULT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      FOREIGN KEY (room_id) REFERENCES rooms(id),
+      FOREIGN KEY (assigned_patient_id) REFERENCES patients(id)
+    );
+  `)
 
-/**
- * create medical record table
- */
-const createMedicalRecordTableQuery = `
+  // Insert default admin user if users table is empty
+  const sql = `SELECT COUNT(*) AS count FROM users`
+  const [rows] = await database.query(sql)
+  if (rows[0].count === 0) {
+    const hashedPassword = bcrypt.hashSync('1234567890', 10)
+    await database.query(
+      `INSERT INTO users (username, password, role, images) VALUES (?, ?, ?, ?)`,
+      ['admin', hashedPassword, 'admin', '/assets/images/admin.png']
+    )
+  }
 
-  CREATE TABLE IF NOT EXISTS medical_records (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    patient_id INTEGER NOT NULL,
-    doctor_id INTEGER,
-    diagnosis TEXT,
-    treatment TEXT,
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (patient_id) REFERENCES patients(id),
-    FOREIGN KEY (doctor_id) REFERENCES doctors(id)
-  );
-
-`
-database.prepare(createMedicalRecordTableQuery).run()
-
-/**
- * create users table
- */
-const createUsersTableQuery = `
-
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    role TEXT DEFAULT 'staff',
-    images TEXT DEFAULT NULL,
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-  );
-
-`
-database.prepare(createUsersTableQuery).run()
-
-/**
- * create prescriptions tabme
- */
-const createPrescriptionTableQuery = `
-
-  CREATE TABLE IF NOT EXISTS prescriptions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    medical_record_id INTEGER NOT NULL,
-    medication_name TEXT NOT NULL,
-    dosage TEXT,
-    duration TEXT,
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (medical_record_id) REFERENCES medical_records(id)
-  );
-
-`
-database.prepare(createPrescriptionTableQuery).run()
-
-/**
- * create Working day tabme
- */
-const createWorkingDaysTableQuery = `
-
-  CREATE TABLE IF NOT EXISTS working_day (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    working_date TEXT NOT NULL,
-    doctor_id INTEGER NOT NULL,
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (doctor_id) REFERENCES doctor(id)
-  );
-
-`
-database.prepare(createWorkingDaysTableQuery).run()
-
-// ------------------------------------------------- execute function --------------------------------------------
-
-// Insert a default admin user only if the users table is empty
-const insertIfTableEmptyQuery = `
-  INSERT INTO users (username, password, role, images)
-  SELECT 'admin', ?, 'admin', '/assets/images/admin.png'
-  WHERE (SELECT COUNT(*) FROM users) = 0;
-`
-
-// Hash the password '1234567890' before storing
-const hashedPassword = bcrypt.hashSync('1234567890', 10)
-database.prepare(insertIfTableEmptyQuery).run(hashedPassword)
+  console.log('✅ MySQL database setup complete.')
+}
 
 module.exports = {
-  database
+  database,
+  setupDatabase
 }

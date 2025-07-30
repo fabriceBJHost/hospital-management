@@ -57,7 +57,7 @@ const Login = () => {
     if (Object.keys(validationErrors).length === 0) {
       // Proceed with form submission logic, e.g., API call
       let response = await window.session.setSession(formData)
-      console.log(response)
+
       if (response.success) {
         // Clear form data and errors on successful login
         setFormData({

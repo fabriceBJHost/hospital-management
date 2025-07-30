@@ -98,7 +98,7 @@ const AddDoctorsModal = ({ open, handleClose, setOpenSnack, setOpenSnackError })
   const mutation = useMutation({
     mutationFn: insertDoctor,
     onSuccess: (data) => {
-      if (data && data.changes) {
+      if (data && data.success) {
         setOpenSnack(true)
         handleClose(true)
         queryclient.invalidateQueries({ queryKey: ['Doctors'] })
@@ -121,7 +121,7 @@ const AddDoctorsModal = ({ open, handleClose, setOpenSnack, setOpenSnackError })
           phone: false,
           email: false
         })
-      } else if (data && data.code) {
+      } else if (data && !data.success) {
         errors.email = 'Email doit être unique'
         setOpenSnackError(true)
         setTouchedFields((prev) => ({

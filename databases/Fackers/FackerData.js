@@ -1,12 +1,15 @@
-const { database } = require('../database')
+const mysql = require('mysql2/promise')
 const bcryptjs = require('bcryptjs')
 
-/**
- * function facker to create list of doctors here
- */
 async function insertDoctors() {
+  const connection = await mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'hospital'
+  })
+
   const doctors = [
-    // [first_name, last_name, specialization, phone, email]
     ['Alice', 'Dupont', 'Cardiologie', '0321234567', 'alice.dupont1@hopital.mg'],
     ['Marc', 'Bertrand', 'Cardiologie', '0321234568', 'marc.bertrand2@hopital.mg'],
     ['Lucie', 'Ramiandrisoa', 'Pédiatrie', '0321234569', 'lucie.rami@hopital.mg'],
@@ -41,28 +44,22 @@ async function insertDoctors() {
 
   const hashedPassword = await bcryptjs.hash('1234567890', 10)
 
-  database.serialize(() => {
-    const stmt = database.prepare(`
-      INSERT INTO doctor (first_name, last_name, images, password, specialization, phone, email)
-      VALUES (?, ?, NULL, ?, ?, ?, ?)
-    `)
-
-    for (const doctor of doctors) {
-      stmt.run(doctor[0], doctor[1], hashedPassword, doctor[2], doctor[3], doctor[4])
+  try {
+    for (const [firstName, lastName, specialization, phone, email] of doctors) {
+      await connection.execute(
+        `INSERT INTO doctor (first_name, last_name, images, password, specialization, phone, email)
+         VALUES (?, ?, NULL, ?, ?, ?, ?)`,
+        [firstName, lastName, hashedPassword, specialization, phone, email]
+      )
     }
 
-    stmt.finalize(() => {
-      console.log('✅ Insertion des 30 docteurs réussie.')
-    })
-  })
-
-  database.close()
+    console.log('✅ Insertion des docteurs réussie.')
+  } catch (error) {
+    console.error('❌ Erreur lors de l’insertion :', error)
+    console.error('Vous avez peut-être déjà inséré ces données.')
+  } finally {
+    await connection.end()
+  }
 }
 
-async function executeFacker() {
-  await insertDoctors()
-}
-
-module.exports = {
-  executeFacker
-}
+insertDoctors()

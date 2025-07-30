@@ -23,14 +23,14 @@ const insertWorkingDays = async (working_date, doctor_id) => {
  * @returns {Promise}
  */
 const getWorkingDate = async () => {
-  const query = database.prepare('SELECT * FROM working_day')
+  const query = 'SELECT * FROM working_day'
 
   try {
-    let response = await query.all()
+    let [rows] = await database.query(query)
 
-    return response
+    return { success: true, data: rows }
   } catch (error) {
-    return error
+    return { success: false, message: 'Erreur ' + error.message }
   }
 }
 
@@ -40,14 +40,14 @@ const getWorkingDate = async () => {
  * @returns {Promise}
  */
 const getSingleWorkingDate = async (id) => {
-  const query = database.prepare('SELECT * FROM working_day WHERE id = ?')
+  const query = 'SELECT * FROM working_day WHERE id = ?'
 
   try {
-    let response = await query.get(id)
+    let [rows] = await database.query(query, [id])
 
-    return response
+    return { success: true, data: rows }
   } catch (error) {
-    return error
+    return { success: false, message: 'Erreur ' + error.message }
   }
 }
 

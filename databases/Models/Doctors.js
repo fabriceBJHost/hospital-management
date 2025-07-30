@@ -21,14 +21,13 @@ const insertDoctor = async (
   phone,
   email
 ) => {
-  const query = database.prepare(
+  const query =
     'INSERT INTO doctor (first_name, last_name, images, password, specialization, phone, email) VALUES (?, ?, ?, ?, ?, ?, ?)'
-  )
 
   try {
     let hashedPassword = await bcryptjs.hash(password, 10)
 
-    let response = await query.run(
+    let [result] = await database.query(query, [
       first_name,
       last_name,
       images,
@@ -36,11 +35,14 @@ const insertDoctor = async (
       specialization,
       phone,
       email
-    )
+    ])
 
-    return response
+    return {
+      success: true,
+      id: result.insertId
+    }
   } catch (error) {
-    return error
+    return { success: false, message: 'Erreur ' + error.message }
   }
 }
 
@@ -49,14 +51,14 @@ const insertDoctor = async (
  * @returns {Promise}
  */
 const getDoctors = async () => {
-  const query = database.prepare('SELECT * FROM doctor')
+  const query = 'SELECT * FROM doctor ORDER BY id DESC'
 
   try {
-    let response = await query.all()
+    let [rows] = await database.query(query)
 
-    return response
+    return { success: true, data: rows }
   } catch (error) {
-    return error
+    return { success: false, message: 'Échec de la récupération des médecins ' + error.message }
   }
 }
 
@@ -66,14 +68,18 @@ const getDoctors = async () => {
  * @returns {Promise}
  */
 const getSingleDoctor = async (id) => {
-  const query = database.prepare('SELECT * FROM doctor WHERE id = ?')
+  const query = 'SELECT * FROM doctor WHERE id = ?'
 
   try {
-    let response = await query.get(id)
+    let [rows] = await database.query(query, [id])
 
-    return response
+    if (rows.length === 0) {
+      return { success: false, message: 'Médecin non trouvé.' }
+    }
+
+    return { success: true, data: rows[0] }
   } catch (error) {
-    return error
+    return { success: false, message: 'Échec de la récupération du médecins ' + error.message }
   }
 }
 
@@ -83,14 +89,17 @@ const getSingleDoctor = async (id) => {
  * @returns {Promise}
  */
 const deleteDoctor = async (id) => {
-  const query = database.prepare('DELETE FROM doctor WHERE id = ?')
+  const query = 'DELETE FROM doctor WHERE id = ?'
 
   try {
-    let response = await query.run(id)
+    let [result] = await database.query(query, [id])
 
-    return response
+    if (result.affectedRows === 0) {
+      return { success: false, message: 'Médecin non trouvé.' }
+    }
+    return { success: true, message: 'Médecin supprimé avec succès.' }
   } catch (error) {
-    return error
+    return { success: false, message: 'Échec de la suppression du médecin ' + error.message }
   }
 }
 

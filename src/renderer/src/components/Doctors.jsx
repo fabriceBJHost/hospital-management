@@ -32,6 +32,7 @@ import { getAllDoctors, getWorkingDate } from '../function/Request'
 import AddDoctorsModal from './Modals/AddDoctorsModal'
 import DoctorToast from './Modals/DoctorToast'
 import DeleteUsersModal from './Modals/DeleteDoctorModal'
+import AddWorkingModal from './Modals/AddWorkingModal'
 dayjs.locale('fr')
 
 const Doctors = () => {
@@ -215,6 +216,10 @@ const Doctors = () => {
   const handleCloseSnackbarDelete = () => setOpenSnackbarDelete(false)
   const handleOpenSnackbarDelete = () => setOpenSnackbarDelete(true)
 
+  const [openModalAddWork, setOpenModalAddWork] = useState(false)
+  const handleOpenModalAddWork = () => setOpenModalAddWork(true)
+  const handleCloseModalAddWork = () => setOpenModalAddWork(false)
+
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
       <AddDoctorsModal
@@ -223,6 +228,7 @@ const Doctors = () => {
         setOpenSnack={handleOpenSnackbarAdd}
         setOpenSnackError={handleOpenSnackbarAddError}
       />
+      <AddWorkingModal handleClose={handleCloseModalAddWork} open={openModalAddWork} />
       <DeleteUsersModal
         handleClose={handleCloseModalDelete}
         id={idToSendDelete}
@@ -305,7 +311,13 @@ const Doctors = () => {
             >
               Ajouter un Médecin
             </Button>
-            <Button variant="outlined" color="primary" startIcon={<FaCalendarAlt />} fullWidth>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<FaCalendarAlt />}
+              fullWidth
+              onClick={handleOpenModalAddWork}
+            >
               Ajouter un Planning
             </Button>
           </Stack>
