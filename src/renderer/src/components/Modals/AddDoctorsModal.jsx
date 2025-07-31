@@ -24,7 +24,7 @@ import {
   FaPhone,
   FaUserMd
 } from 'react-icons/fa'
-import { handleFileChange } from '../../function/FunctionHelper'
+import { handleFileChange, makeCapitalize, makeUpercase } from '../../function/FunctionHelper'
 import classe from '../../assets/css/Users.module.css'
 import { validationAddDoctor } from '../../function/Validation'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -57,6 +57,16 @@ const AddDoctorsModal = ({ open, handleClose, setOpenSnack, setOpenSnackError })
           image: base64
         }))
       })
+    } else if (name === 'last_name') {
+      setFormData((prev) => ({
+        ...prev,
+        last_name: makeUpercase(value)
+      }))
+    } else if (name === 'first_name') {
+      setFormData((prev) => ({
+        ...prev,
+        first_name: makeCapitalize(value)
+      }))
     } else {
       setFormData((prev) => ({
         ...prev,

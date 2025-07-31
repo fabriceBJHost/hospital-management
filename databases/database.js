@@ -113,7 +113,8 @@ async function setupDatabase() {
       doctor_id INT NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      FOREIGN KEY (doctor_id) REFERENCES doctor(id)
+      FOREIGN KEY (doctor_id) REFERENCES doctor(id) ON DELETE CASCADE,
+      UNIQUE KEY unique_doctor_date (doctor_id, working_date)
     );
   `)
 

@@ -124,3 +124,22 @@ export const validationAddDoctor = (formData) => {
 
   return errors
 }
+
+/**
+ * function who validate add working date
+ * @param {Object} formData
+ * @returns {Object}
+ */
+export const validationAddWorkingDate = (formData) => {
+  const errors = {}
+
+  if (formData.dates.length === 0) {
+    errors.dates = 'La date de travail est requise'
+  }
+
+  if (formData.doctorIds.length === 0) {
+    errors.doctorIds = 'Le médecin est requis'
+  }
+
+  return errors
+}

@@ -102,5 +102,16 @@ export const deleteDoctor = async (id) => {
 export const getWorkingDate = async () => {
   const response = await window.workDay.getAllWorkingDate()
 
+  return response?.data
+}
+
+/**
+ * function to insert working date
+ * @param {Object} formData
+ * @returns {Object}
+ */
+export const insertWorkingDate = async (formData) => {
+  const response = await window.workDay.insertWorkingDate(formData)
+
   return response
 }

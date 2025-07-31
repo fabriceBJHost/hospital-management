@@ -59,7 +59,7 @@ const Users = () => {
       }
     }
   })
-  console.log(users)
+
   // Count roles
   const roleCounts = users.reduce(
     (acc, user) => {

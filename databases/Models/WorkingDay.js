@@ -2,19 +2,26 @@ const { database } = require('../database')
 
 /**
  * function to insert working date to doctor
- * @param {Object} working_date
- * @param {Object} doctor_id
+ * @param {Array} working_dates
+ * @param {Array} doctor_ids
  * @returns {Promise}
  */
-const insertWorkingDays = async (working_date, doctor_id) => {
-  const query = database.prepare('INSERT INTO working_day VALUES (?, ?)')
+const insertWorkingDays = async (working_dates, doctor_ids) => {
+  const query = `INSERT INTO working_day (working_date, doctor_id) VALUES ? ON DUPLICATE KEY UPDATE updated_at = CURRENT_TIMESTAMP`
+  const values = []
+
+  for (const doctor_id of doctor_ids) {
+    for (const date of working_dates) {
+      values.push([date, doctor_id])
+    }
+  }
 
   try {
-    let response = await query.run(working_date, doctor_id)
+    const [result] = await database.query(query, [values])
 
-    return response
+    return { success: true, message: 'Dates enregistrées avec succès', result }
   } catch (error) {
-    return error
+    return { success: false, message: 'Erreur ' + error.message }
   }
 }
 
@@ -45,7 +52,7 @@ const getSingleWorkingDate = async (id) => {
   try {
     let [rows] = await database.query(query, [id])
 
-    return { success: true, data: rows }
+    return { success: true, data: rows[0] }
   } catch (error) {
     return { success: false, message: 'Erreur ' + error.message }
   }

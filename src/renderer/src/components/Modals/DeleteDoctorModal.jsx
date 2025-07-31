@@ -21,6 +21,7 @@ const DeleteUsersModal = ({ open, handleClose, setOpenSnackDelete, id }) => {
       setOpenSnackDelete(true)
       handleClose(true)
       queryclient.invalidateQueries({ queryKey: ['Doctors'] })
+      queryclient.invalidateQueries({ queryKey: ['WorkingDay'] })
     },
     onError: (err) => {
       console.log(err)

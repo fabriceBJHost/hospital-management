@@ -72,7 +72,7 @@ const Doctors = () => {
     const formattedDate = dayjs(date).format('YYYY-MM-DD')
 
     const doctorIds = workingDays
-      .filter((wd) => wd.working_date === formattedDate)
+      .filter((wd) => dayjs(wd.working_date).format('YYYY-MM-DD') === formattedDate)
       .map((wd) => wd.doctor_id)
 
     const doctorsWorking = doctors.filter((doc) => doctorIds.includes(doc.id))
@@ -81,8 +81,10 @@ const Doctors = () => {
   }
 
   useEffect(() => {
-    handleDateChange(selectedDate)
-  }, [])
+    if (workingDays.length > 0 && doctors.length > 0) {
+      handleDateChange(selectedDate)
+    }
+  }, [workingDays, doctors, selectedDate])
 
   const columns = [
     {
@@ -327,7 +329,7 @@ const Doctors = () => {
         <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12 }}>
           <Card style={{ height: '100%' }}>
             <CardContent>
-              <Typography variant="h6">Liste des dicteurs</Typography>
+              <Typography variant="h6">Liste des docteurs</Typography>
               <ThemeProvider theme={theme}>
                 <div
                   style={{

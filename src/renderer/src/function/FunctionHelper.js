@@ -33,3 +33,24 @@ export const handleFileChange = (img_file, callback) => {
     }
   }
 }
+
+/**
+ * Function to convert a sentence to uppercase
+ * @param {string} sentence - The sentence to convert
+ * @returns {string} - The converted sentence in uppercase
+ */
+export const makeUpercase = (sentence) => {
+  return sentence.toUpperCase()
+}
+
+/**
+ * Function to convert a sentence to capitalize
+ * @param {string} sentence - The sentence to convert
+ * @returns {string} - The converted sentence in capitalize
+ */
+export const makeCapitalize = (sentence) => {
+  return sentence
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}

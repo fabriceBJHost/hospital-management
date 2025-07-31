@@ -14,20 +14,28 @@ import {
 } from '@mui/material'
 import { FaCalendarAlt, FaUserMd } from 'react-icons/fa'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
-import { getAllDoctors } from '../../function/Request'
+import { useEffect, useState } from 'react'
+import { getAllDoctors, insertWorkingDate } from '../../function/Request'
 import { useQuery } from '@tanstack/react-query'
 import classe from '../../assets/css/Users.module.css'
 import dayjs from 'dayjs'
+import { validationAddWorkingDate } from '../../function/Validation'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const AddWorkingModal = ({ open, handleClose }) => {
   const [formData, setFormData] = useState({ dates: [], doctorIds: [] })
   const [dateInput, setDateInput] = useState('')
+  const [errors, setErrors] = useState({})
+  const [isSubmited, setIsSubmited] = useState(false)
 
   const { data: doctors = [] } = useQuery({
     queryKey: ['Doctors'],
     queryFn: getAllDoctors
   })
+
+  useEffect(() => {
+    isSubmited && setErrors(validationAddWorkingDate(formData))
+  }, [formData, isSubmited])
 
   const handleAddDate = () => {
     if (dateInput && !formData.dates.includes(dateInput)) {
@@ -43,8 +51,30 @@ const AddWorkingModal = ({ open, handleClose }) => {
     })
   }
 
+  const queryclient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: insertWorkingDate,
+    onSuccess: (data) => {
+      if (data.success) {
+        queryclient.invalidateQueries(['WorkingDay'])
+        handleClose()
+        setIsSubmited(false)
+        setFormData({ dates: [], doctorIds: [] })
+        setErrors({})
+        setDateInput('')
+      }
+    },
+    onError: (error) => {
+      console.error('Error inserting working date:', error)
+    }
+  })
+
   const handleSubmit = async () => {
-    console.log(formData)
+    setIsSubmited(true)
+    if (Object.keys(errors).length == 0) {
+      mutation.mutate(formData)
+    }
   }
 
   return (
@@ -71,6 +101,8 @@ const AddWorkingModal = ({ open, handleClose }) => {
                   label="Docteurs"
                   placeholder="Sélectionner les docteurs"
                   margin="dense"
+                  error={Boolean(errors.doctorIds)}
+                  helperText={errors.doctorIds ? errors.doctorIds : ''}
                   InputProps={{
                     ...params.InputProps,
                     startAdornment: (
@@ -106,7 +138,12 @@ const AddWorkingModal = ({ open, handleClose }) => {
               type="date"
               fullWidth
               margin="dense"
-              helperText="Ajouter la date au liste des dates une fois que vous avez selectionné un"
+              error={Boolean(errors.dates)}
+              helperText={
+                errors.dates
+                  ? errors.dates
+                  : 'Ajouter la date au liste des dates une fois que vous avez selectionné un'
+              }
               value={dateInput}
               slotProps={{
                 input: {

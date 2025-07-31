@@ -1,7 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-const { getWorkingDate } = require('../../databases/Models/WorkingDay')
-const { executeFacker } = require('../../databases/Fackers/FackerData')
 
 // Custom APIs for renderer
 const api = {}
@@ -15,8 +13,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('api', api)
 
     contextBridge.exposeInMainWorld('session', {
-      setSession: (sessionData) => ipcRenderer.invoke('login', sessionData),
-      facker: () => executeFacker()
+      setSession: (sessionData) => ipcRenderer.invoke('login', sessionData)
     })
 
     /**
@@ -54,7 +51,7 @@ if (process.contextIsolated) {
      * API for all working date
      */
     contextBridge.exposeInMainWorld('workDay', {
-      getAllWorkingDate: () => getWorkingDate(),
+      getAllWorkingDate: () => ipcRenderer.invoke('getAllWorkingDate'),
       insertWorkingDate: (request) => ipcRenderer.invoke('insertWorkingDate', request),
       getSingleWorkingDate: (request) => ipcRenderer.invoke('getSingleWorkingDate', request)
     })

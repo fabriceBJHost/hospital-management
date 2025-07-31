@@ -17,7 +17,11 @@ const {
   deleteDoctor,
   getDoctors
 } = require('../../databases/Models/Doctors')
-const { getSingleWorkingDate, insertWorkingDays } = require('../../databases/Models/WorkingDay')
+const {
+  getSingleWorkingDate,
+  insertWorkingDays,
+  getWorkingDate
+} = require('../../databases/Models/WorkingDay')
 
 /**
  * creating all table if not exists
@@ -279,9 +283,9 @@ ipcMain.handle('deleteDoctor', async (event, request) => {
  * insert working date function
  */
 ipcMain.handle('insertWorkingDate', async (event, request) => {
-  const { working_date, doctor_id } = request
+  const { dates, doctorIds } = request
 
-  const response = await insertWorkingDays(working_date, doctor_id)
+  const response = await insertWorkingDays(dates, doctorIds)
 
   return response
 })
@@ -293,6 +297,12 @@ ipcMain.handle('getSingleWorkingDate', async (event, request) => {
   const { id } = request
 
   const response = await getSingleWorkingDate(id)
+
+  return response
+})
+
+ipcMain.handle('getAllWorkingDate', async () => {
+  const response = await getWorkingDate()
 
   return response
 })
