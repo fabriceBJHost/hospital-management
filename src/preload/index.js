@@ -55,6 +55,14 @@ if (process.contextIsolated) {
       insertWorkingDate: (request) => ipcRenderer.invoke('insertWorkingDate', request),
       getSingleWorkingDate: (request) => ipcRenderer.invoke('getSingleWorkingDate', request)
     })
+
+    /**
+     * API for all patients
+     */
+    contextBridge.exposeInMainWorld('patients', {
+      getAllPatients: () => ipcRenderer.invoke('getAllPatients'),
+      getSinglePatient: (request) => ipcRenderer.invoke('getSinglePatient', request)
+    })
   } catch (error) {
     console.error(error)
   }

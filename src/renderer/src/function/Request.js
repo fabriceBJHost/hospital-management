@@ -115,3 +115,13 @@ export const insertWorkingDate = async (formData) => {
 
   return response
 }
+
+/**
+ * function to get all patients from backend
+ * @returns {Array}
+ */
+export const getAllParients = async () => {
+  const response = await window.patients.getAllPatients()
+
+  return response?.data
+}

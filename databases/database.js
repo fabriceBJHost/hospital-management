@@ -21,9 +21,9 @@ async function setupDatabase() {
       last_name VARCHAR(255) NOT NULL,
       gender VARCHAR(10) NOT NULL,
       birth_date DATE NOT NULL,
-      phone VARCHAR(50),
+      phone VARCHAR(50) UNIQUE NOT NULL,
       email VARCHAR(255),
-      address TEXT,
+      address TEXT NOT NULL,
       is_hospitalized BOOLEAN DEFAULT FALSE,
       images TEXT DEFAULT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -58,8 +58,8 @@ async function setupDatabase() {
       status VARCHAR(50) DEFAULT 'Scheduled',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      FOREIGN KEY (patient_id) REFERENCES patients(id),
-      FOREIGN KEY (doctor_id) REFERENCES doctor(id)
+      FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE,
+      FOREIGN KEY (doctor_id) REFERENCES doctor(id) ON DELETE RESTRICT
     );
   `)
 
@@ -73,8 +73,8 @@ async function setupDatabase() {
       treatment TEXT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      FOREIGN KEY (patient_id) REFERENCES patients(id),
-      FOREIGN KEY (doctor_id) REFERENCES doctor(id)
+      FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE,
+      FOREIGN KEY (doctor_id) REFERENCES doctor(id) ON DELETE RESTRICT
     );
   `)
 
@@ -101,7 +101,7 @@ async function setupDatabase() {
       duration VARCHAR(255),
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      FOREIGN KEY (medical_record_id) REFERENCES medical_records(id)
+      FOREIGN KEY (medical_record_id) REFERENCES medical_records(id) ON DELETE CASCADE
     );
   `)
 
@@ -143,8 +143,8 @@ async function setupDatabase() {
       assigned_patient_id INT DEFAULT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      FOREIGN KEY (room_id) REFERENCES rooms(id),
-      FOREIGN KEY (assigned_patient_id) REFERENCES patients(id)
+      FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
+      FOREIGN KEY (assigned_patient_id) REFERENCES patients(id) ON DELETE RESTRICT
     );
   `)
 

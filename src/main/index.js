@@ -22,6 +22,7 @@ const {
   insertWorkingDays,
   getWorkingDate
 } = require('../../databases/Models/WorkingDay')
+const { getAllPatients, getSinglePatient } = require('../../databases/Models/Patients')
 
 /**
  * creating all table if not exists
@@ -301,8 +302,30 @@ ipcMain.handle('getSingleWorkingDate', async (event, request) => {
   return response
 })
 
+/**
+ * function to get all working date
+ */
 ipcMain.handle('getAllWorkingDate', async () => {
   const response = await getWorkingDate()
+
+  return response
+})
+
+/**
+ * function to get all patients
+ */
+ipcMain.handle('getAllPatients', async () => {
+  const response = await getAllPatients()
+
+  return response
+})
+
+/**
+ * function to get single patients
+ */
+ipcMain.handle('getSinglePatient', async (event, request) => {
+  const { id } = request
+  const response = await getSinglePatient(id)
 
   return response
 })

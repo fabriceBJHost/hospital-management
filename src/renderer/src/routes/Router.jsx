@@ -12,6 +12,7 @@ import MedicalRecord from '../components/MedicalRecord'
 import Prescription from '../components/Prescription'
 import Setting from '../components/Setting'
 import Notification from '../components/Notification'
+import RoomBedRoom from '../components/RoomBedRoom'
 
 /**
  * function who return all view
@@ -66,6 +67,10 @@ const Router = createHashRouter([
       {
         path: '/notification',
         element: <Notification />
+      },
+      {
+        path: '/berdoom',
+        element: <RoomBedRoom />
       }
     ]
   },

@@ -8,18 +8,30 @@ import {
   IconButton,
   Stack,
   Typography,
-  Tooltip as Tooltips
+  Tooltip as Tooltips,
+  CircularProgress,
+  Alert,
+  Box
 } from '@mui/material'
 import classe from '../assets/css/Patients.module.css'
-import patientsList from '../patients.json'
 import { FaEdit, FaPlusCircle, FaTrashAlt } from 'react-icons/fa'
 import { frFR } from '@mui/x-data-grid/locales'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { DataGrid } from '@mui/x-data-grid'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
+import { useQuery } from '@tanstack/react-query'
+import { getAllParients } from '../function/Request'
 
 const Patients = () => {
-  const patients = patientsList
+  const {
+    data: patients = [],
+    isPending,
+    isError,
+    error
+  } = useQuery({
+    queryKey: ['Patients'],
+    queryFn: getAllParients
+  })
 
   const totalIsHospitalized = patients.reduce((acc, patient) => {
     if (patient.is_hospitalized) {
@@ -63,13 +75,6 @@ const Patients = () => {
       align: 'center'
     },
     {
-      field: 'birth_date',
-      headerName: 'Date de naissance',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center'
-    },
-    {
       field: 'phone',
       headerName: 'Téléphone',
       flex: 1,
@@ -80,20 +85,6 @@ const Patients = () => {
       field: 'email',
       headerName: 'Email',
       flex: 1,
-      headerAlign: 'center',
-      align: 'center'
-    },
-    {
-      field: 'address',
-      headerName: 'Adresse',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center'
-    },
-    {
-      field: 'is_hospitalized',
-      headerName: 'Hospitalizer',
-      width: 80,
       headerAlign: 'center',
       align: 'center'
     },
@@ -159,24 +150,13 @@ const Patients = () => {
 
   const paginationModel = { page: 0, pageSize: 10 }
 
-  const changeDate = (date) => {
-    return dayjs(date).format('DD-MM-YYYY')
-  }
-
-  const makeYes = (bools) => {
-    return bools === true ? 'Oui' : 'Non'
-  }
-
   const dataRow = patients.map((patient) => ({
     id: patient.id,
     first_name: patient.first_name,
     last_name: patient.last_name,
     gender: patient.gender,
-    birth_date: changeDate(patient.birth_date),
     phone: patient.phone,
     email: patient.email,
-    address: patient.address,
-    is_hospitalized: makeYes(patient.is_hospitalized),
     images: patient.images,
     action: patient.id
   }))
@@ -223,28 +203,36 @@ const Patients = () => {
                     width: '100%'
                   }}
                 >
-                  <DataGrid
-                    rows={dataRow}
-                    columns={columns}
-                    initialState={{ pagination: { paginationModel } }}
-                    pageSizeOptions={[5, 10]}
-                    disableRowSelectionOnClick
-                    sx={{
-                      border: 'solid 1px #e0e0e0',
-                      width: 'auto', // Ensures the DataGrid takes full width
-                      height: '50%', // Ensures it grows to fit content
-                      minHeight: 400, // Minimum height for the DataGrid
-                      display: 'flex',
-                      justifyContent: 'center',
-                      '@media (max-width: 600px)': {
-                        width: '100%', // 100% width on small screens
-                        height: 'auto' // Allow height to grow with content
-                      }
-                    }}
-                    // slots={{ toolbar: GridToolbar }}
-                    showToolbar
-                    localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
-                  />
+                  {isPending ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <CircularProgress />
+                    </Box>
+                  ) : isError ? (
+                    <Alert severity="error">{error.message}</Alert>
+                  ) : (
+                    <DataGrid
+                      rows={dataRow}
+                      columns={columns}
+                      initialState={{ pagination: { paginationModel } }}
+                      pageSizeOptions={[5, 10]}
+                      disableRowSelectionOnClick
+                      sx={{
+                        border: 'solid 1px #e0e0e0',
+                        width: 'auto', // Ensures the DataGrid takes full width
+                        height: '50%', // Ensures it grows to fit content
+                        minHeight: 400, // Minimum height for the DataGrid
+                        display: 'flex',
+                        justifyContent: 'center',
+                        '@media (max-width: 600px)': {
+                          width: '100%', // 100% width on small screens
+                          height: 'auto' // Allow height to grow with content
+                        }
+                      }}
+                      // slots={{ toolbar: GridToolbar }}
+                      showToolbar
+                      localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+                    />
+                  )}
                 </div>
               </ThemeProvider>
             </CardContent>

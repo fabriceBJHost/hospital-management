@@ -27,7 +27,8 @@ import {
   FaMinus,
   FaRegSquare,
   FaSearch,
-  FaBell
+  FaBell,
+  FaDoorOpen
 } from 'react-icons/fa'
 import classe from '../assets/css/Navigation.module.css'
 import { Link, useLocation } from 'react-router-dom'
@@ -465,6 +466,29 @@ const NavigationTest = ({ childrens }) => {
                 </ListItemIcon>
                 <ListItemText
                   primary={'Prescription médical'}
+                  className={open ? classe.textVisible : classe.textHidden}
+                />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+
+          {/* Bedroom and Room navigation Link */}
+          <Link className={classe.menu} to={'/berdoom'}>
+            <ListItem
+              disablePadding
+              className={location.pathname == '/berdoom' && classe.menuActive}
+              sx={{ display: 'block' }}
+            >
+              <ListItemButton
+                className={`${classe.ListItemButton} ${open ? classe.open : classe.closed}`}
+              >
+                <ListItemIcon className={open ? classe.iconOpen : classe.iconClosed}>
+                  <FaDoorOpen
+                    className={location.pathname == '/berdoom' ? classe.iconActive : classe.icon}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  primary={'Chambre et Lit'}
                   className={open ? classe.textVisible : classe.textHidden}
                 />
               </ListItemButton>
