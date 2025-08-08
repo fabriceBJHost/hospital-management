@@ -10,3 +10,5 @@ package-lock.json
 .devdbrc
 patients.json
 queryKey.txt
+rooms_data.js
+bed_rooms_data.json

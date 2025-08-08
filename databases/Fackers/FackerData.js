@@ -1,5 +1,7 @@
 const mysql = require('mysql2/promise')
 const bcryptjs = require('bcryptjs')
+const { insertFackerRoom } = require('./InsertRoom')
+const { insertBedroom } = require('./InsertBedRoom')
 
 /**
  * function to insert fake doctors
@@ -428,3 +430,5 @@ const insertPatients = async () => {
 
 insertDoctors()
 insertPatients()
+insertFackerRoom()
+insertBedroom()

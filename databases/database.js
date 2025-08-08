@@ -129,7 +129,8 @@ async function setupDatabase() {
       status VARCHAR(50) DEFAULT 'available',
       features TEXT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      UNIQUE KEY unique_name_floor_building (name, floor, building)
     );
   `)
 
@@ -144,7 +145,8 @@ async function setupDatabase() {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
-      FOREIGN KEY (assigned_patient_id) REFERENCES patients(id) ON DELETE RESTRICT
+      FOREIGN KEY (assigned_patient_id) REFERENCES patients(id) ON DELETE RESTRICT,
+      UNIQUE KEY unique_room_id_bed_number (room_id, bed_number)
     );
   `)
 
