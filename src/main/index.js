@@ -23,6 +23,12 @@ const {
   getWorkingDate
 } = require('../../databases/Models/WorkingDay')
 const { getAllPatients, getSinglePatient } = require('../../databases/Models/Patients')
+const {
+  getAllBedRooms,
+  getAllRooms,
+  insertRoom,
+  insertBedroom
+} = require('../../databases/Models/BedroomRoom')
 
 /**
  * creating all table if not exists
@@ -326,6 +332,46 @@ ipcMain.handle('getAllPatients', async () => {
 ipcMain.handle('getSinglePatient', async (event, request) => {
   const { id } = request
   const response = await getSinglePatient(id)
+
+  return response
+})
+
+/**
+ * function to get all rooms
+ */
+ipcMain.handle('getAllRooms', async () => {
+  const response = await getAllRooms()
+
+  return response
+})
+
+/**
+ * function to get all bedrooms
+ */
+ipcMain.handle('getAllBedrooms', async () => {
+  const response = await getAllBedRooms()
+
+  return response
+})
+
+/**
+ * function to insert a new room
+ */
+ipcMain.handle('insertRoom', async (event, request) => {
+  const { name, type, floor, building, status, features } = request
+
+  const response = await insertRoom(name, type, floor, building, status, features)
+
+  return response
+})
+
+/**
+ * function to insert a new bedroom
+ */
+ipcMain.handle('insertBedroom', async (event, request) => {
+  const { room_id, bed_number, status, assigned_patient_id } = request
+
+  const response = await insertBedroom(room_id, bed_number, status, assigned_patient_id)
 
   return response
 })

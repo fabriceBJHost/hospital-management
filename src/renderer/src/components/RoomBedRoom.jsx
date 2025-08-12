@@ -7,14 +7,19 @@ import {
   Grid,
   Paper,
   Stack,
-  Typography
+  Typography,
+  CircularProgress,
+  Alert
 } from '@mui/material'
 import classe from '../assets/css/RoomBedRoom.module.css'
 import { Pie } from 'react-chartjs-2'
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
-import { rooms } from '../rooms_data.js'
-import bedRooms from '../bed_rooms_data.json'
 import { FaPlusCircle } from 'react-icons/fa'
+import { useQuery } from '@tanstack/react-query'
+import { getAllBedRoom, getAllRoom } from '../function/Request.js'
+import AddRooms from './Modals/AddRooms.jsx'
+import { useState } from 'react'
+import RoomToast from './Modals/RoomToast.jsx'
 
 Chart.register(ArcElement, Tooltip, Legend)
 
@@ -34,14 +39,35 @@ const options = {
 }
 
 const RoomBedRoom = () => {
+  const {
+    data: rooms = [],
+    isPending: isRoomsPending,
+    isError: isRoomsError,
+    error: roomsError
+  } = useQuery({
+    queryKey: ['Rooms'],
+    queryFn: getAllRoom
+  })
+
+  const {
+    data: bedRooms = [],
+    isPending: isBedRoomsPending,
+    isError: isBedRoomsError,
+    error: BedroomsError
+  } = useQuery({
+    queryKey: ['BedRooms'],
+    queryFn: getAllBedRoom
+  })
+
   const disponibles = rooms.reduce(
     (acc, room) => {
-      if (room.status === 'disponible') acc.disponible += 1
+      if (room.status.toLowerCase() === 'disponible') acc.disponible += 1
       else acc.maintenance += 1
       return acc
     },
     { disponible: 0, maintenance: 0 }
   )
+
   const stats = [
     { label: 'Total des Chambres', value: rooms.length, color: '#1976d2' },
     { label: 'Disponible', value: disponibles.disponible, color: 'green' },
@@ -51,11 +77,11 @@ const RoomBedRoom = () => {
   const bedRoomDisponibility = bedRooms.reduce(
     (acc, bedRoom) => {
       if (bedRoom.status === 'Vacant') acc.disponible += 1
-      else if (bedRoom.status === 'Occupied') acc.occupé += 1
+      else if (bedRoom.status === 'Occupied') acc.occupe += 1
       else acc.maintenance += 1
       return acc
     },
-    { disponible: 0, occupé: 0, maintenance: 0 }
+    { disponible: 0, occupe: 0, maintenance: 0 }
   )
 
   const data = {
@@ -65,7 +91,7 @@ const RoomBedRoom = () => {
         label: 'Lit',
         data: [
           bedRoomDisponibility.disponible,
-          bedRoomDisponibility.occupé,
+          bedRoomDisponibility.occupe,
           bedRoomDisponibility.maintenance
         ],
         backgroundColor: ['#4caf50', '#f44336', '#ff9800'],
@@ -73,8 +99,35 @@ const RoomBedRoom = () => {
       }
     ]
   }
+
+  const [openAddRoom, setOpenAddRoom] = useState(false)
+  const handleOpenAddRoom = () => setOpenAddRoom(true)
+  const handleCloseAddRoom = () => setOpenAddRoom(false)
+
+  /**
+   * open the modal and toest on add
+   */
+  const [openModalAdd, setOpenModalAdd] = useState(false)
+  const handleOpenModalAdd = () => setOpenModalAdd(true)
+  const handleCloseModalAdd = () => setOpenModalAdd(false)
+
+  const [openModalAddError, setOpenModalAddError] = useState(false)
+  const handleOpenModalAddError = () => setOpenModalAddError(true)
+  const handleCloseModalAddError = () => setOpenModalAddError(false)
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
+      <AddRooms
+        handleClose={handleCloseAddRoom}
+        open={openAddRoom}
+        setOpenSnack={handleOpenModalAdd}
+        setOpenSnackError={handleOpenModalAddError}
+      />
+      <RoomToast
+        handleCloseSnackbarAdd={handleCloseModalAdd}
+        openSnackbarAdd={openModalAdd}
+        handleCloseSnackbarAddError={handleCloseModalAddError}
+        openSnackbarAddError={openModalAddError}
+      />
       <Grid container spacing={2} className={classe.HeaderGridContainer}>
         <Grid size={12} className={classe.statGridItem}>
           <Stack direction={'row'} alignItems="center" justifyContent="space-between">
@@ -82,7 +135,7 @@ const RoomBedRoom = () => {
               Gestion des Chambres et Lits
             </Typography>
             <Box gap={1} display="flex" alignItems="center">
-              <Button variant="contained" startIcon={<FaPlusCircle />}>
+              <Button variant="contained" startIcon={<FaPlusCircle />} onClick={handleOpenAddRoom}>
                 Chambres
               </Button>
               <Button variant="contained" startIcon={<FaPlusCircle />}>
@@ -101,7 +154,14 @@ const RoomBedRoom = () => {
               <CardContent>
                 <Typography variant="h6">{stat.label}</Typography>
                 <Typography variant="h4" color={stat.color}>
-                  {stat.value}
+                  {isRoomsPending ? (
+                    <CircularProgress size={24} />
+                  ) : isRoomsError ? (
+                    <Alert severity="error">{roomsError.message}</Alert>
+                  ) : (
+                    stat.value
+                  )}
+                  {/* {stat.value} */}
                 </Typography>
               </CardContent>
             </Card>

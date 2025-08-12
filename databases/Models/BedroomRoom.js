@@ -62,8 +62,24 @@ const getAllRooms = async () => {
   }
 }
 
+/**
+ * function to get all bedrooms
+ * @returns {Promise<Object>}
+ */
+const getAllBedRooms = async () => {
+  const query = `SELECT * FROM bedrooms`
+
+  try {
+    const [rows] = await database.query(query)
+    return { success: true, data: rows }
+  } catch (error) {
+    return { success: false, error: error.message }
+  }
+}
+
 module.exports = {
   insertRoom,
   insertBedroom,
-  getAllRooms
+  getAllRooms,
+  getAllBedRooms
 }

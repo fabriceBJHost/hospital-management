@@ -127,7 +127,7 @@ async function setupDatabase() {
       floor INT NOT NULL,
       building VARCHAR(100),
       status VARCHAR(50) DEFAULT 'available',
-      features TEXT,
+      features TEXT DEFAULT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       UNIQUE KEY unique_name_floor_building (name, floor, building)

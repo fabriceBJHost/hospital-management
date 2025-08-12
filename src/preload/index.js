@@ -63,6 +63,16 @@ if (process.contextIsolated) {
       getAllPatients: () => ipcRenderer.invoke('getAllPatients'),
       getSinglePatient: (request) => ipcRenderer.invoke('getSinglePatient', request)
     })
+
+    /**
+     * API for all rooms and bedrooms
+     */
+    contextBridge.exposeInMainWorld('roomBedroom', {
+      getAllRooms: () => ipcRenderer.invoke('getAllRooms'),
+      getAllBedrooms: () => ipcRenderer.invoke('getAllBedrooms'),
+      insertRoom: (request) => ipcRenderer.invoke('insertRoom', request),
+      insertBedroom: (request) => ipcRenderer.invoke('insertBedroom', request)
+    })
   } catch (error) {
     console.error(error)
   }

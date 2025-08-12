@@ -143,3 +143,30 @@ export const validationAddWorkingDate = (formData) => {
 
   return errors
 }
+
+/**
+ * function to validate insert new room
+ * @param {Object} formData
+ * @returns {Object}
+ */
+export const validateInsertRoom = (formData) => {
+  const errors = {}
+
+  if (!formData.name) {
+    errors.name = 'Le Nom du chambre est requis'
+  }
+
+  if (!formData.building) {
+    errors.building = 'Le Bâtiment est requis'
+  } else if (formData.building.length < 3) {
+    errors.building = 'Le Bâtiment doit comporter au moins 3 caractères'
+  }
+
+  if (!formData.floor) {
+    errors.floor = "L'étage est requis"
+  } else if (formData.floor < 0 || formData.floor == 0) {
+    errors.floor = "L'étage ne peut pas être négatif ou nul"
+  }
+
+  return errors
+}

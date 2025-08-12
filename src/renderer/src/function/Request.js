@@ -125,3 +125,45 @@ export const getAllParients = async () => {
 
   return response?.data
 }
+
+/**
+ * function to all rooms
+ * @returns {Array}
+ */
+export const getAllRoom = async () => {
+  const response = await window.roomBedroom.getAllRooms()
+
+  return response?.data
+}
+
+/**
+ * function to get all bedrooms
+ * @returns {Array}
+ */
+export const getAllBedRoom = async () => {
+  const response = await window.roomBedroom.getAllBedrooms()
+
+  return response?.data
+}
+
+/**
+ * function to insert new room
+ * @param {Object} formData
+ * @returns {Object}
+ */
+export const insertRoom = async (formData) => {
+  const response = await window.roomBedroom.insertRoom(formData)
+
+  return response
+}
+
+/**
+ * function to insert new berRoom
+ * @param {Object} formData
+ * @returns {Object}
+ */
+export const insertBedRoom = async (formData) => {
+  const response = await window.roomBedroom.insertBedroom(formData)
+
+  return response
+}
