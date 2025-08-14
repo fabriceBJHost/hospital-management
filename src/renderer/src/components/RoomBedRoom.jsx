@@ -20,6 +20,7 @@ import { getAllBedRoom, getAllRoom } from '../function/Request.js'
 import AddRooms from './Modals/AddRooms.jsx'
 import { useState } from 'react'
 import RoomToast from './Modals/RoomToast.jsx'
+import AddBedRoom from './Modals/AddBedRoom.jsx'
 
 Chart.register(ArcElement, Tooltip, Legend)
 
@@ -114,6 +115,8 @@ const RoomBedRoom = () => {
   const [openModalAddError, setOpenModalAddError] = useState(false)
   const handleOpenModalAddError = () => setOpenModalAddError(true)
   const handleCloseModalAddError = () => setOpenModalAddError(false)
+
+  const [openAddRooms, setOpenAddRooms] = useState(false)
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
       <AddRooms
@@ -122,6 +125,7 @@ const RoomBedRoom = () => {
         setOpenSnack={handleOpenModalAdd}
         setOpenSnackError={handleOpenModalAddError}
       />
+      {/* <AddBedRoom handleClose={} /> */}
       <RoomToast
         handleCloseSnackbarAdd={handleCloseModalAdd}
         openSnackbarAdd={openModalAdd}

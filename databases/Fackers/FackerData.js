@@ -428,7 +428,16 @@ const insertPatients = async () => {
   }
 }
 
-insertDoctors()
-insertPatients()
-insertFackerRoom()
-insertBedroom()
+/**
+ * insert all data into database with order
+ */
+async function insertAll() {
+  await insertDoctors() // run 1
+  await insertPatients() // run 2
+  await insertFackerRoom() // run 3
+  await insertBedroom() // run 4
+}
+
+insertAll()
+  .then(() => console.log('All fackers inserts done successfully.'))
+  .catch((err) => console.error('Error inserting fackers:', err))

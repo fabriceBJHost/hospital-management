@@ -161,7 +161,7 @@ async function setupDatabase() {
     )
   }
 
-  console.log('✅ MySQL database setup complete.')
+  console.log('✅ MySQL table setup complete.')
 }
 
 module.exports = {

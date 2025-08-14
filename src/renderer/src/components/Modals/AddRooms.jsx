@@ -26,7 +26,7 @@ const AddRooms = ({ open, handleClose, setOpenSnack, setOpenSnackError }) => {
     floor: '',
     building: '',
     status: 'Disponible',
-    features: null
+    features: ''
   })
 
   const [errors, setErrors] = useState({})
@@ -79,6 +79,8 @@ const AddRooms = ({ open, handleClose, setOpenSnack, setOpenSnackError }) => {
           floor: false,
           building: false
         })
+      } else if (data && !data.success) {
+        setOpenSnackError(true)
       }
     },
     onError: () => {
@@ -101,7 +103,7 @@ const AddRooms = ({ open, handleClose, setOpenSnack, setOpenSnackError }) => {
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle sx={{ color: 'primary.main' }}>
         <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} gap={2}>
-          <FaDoorOpen /> Ajouter une nouveau Médecin
+          <FaDoorOpen /> Ajouter un nouveau chambre
         </Stack>
       </DialogTitle>
       <DialogContent>
