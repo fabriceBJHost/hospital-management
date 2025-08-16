@@ -77,8 +77,8 @@ const RoomBedRoom = () => {
 
   const bedRoomDisponibility = bedRooms.reduce(
     (acc, bedRoom) => {
-      if (bedRoom.status === 'Vacant') acc.disponible += 1
-      else if (bedRoom.status === 'Occupied') acc.occupe += 1
+      if (bedRoom.status === 'Disponible') acc.disponible += 1
+      else if (bedRoom.status === 'Occupé') acc.occupe += 1
       else acc.maintenance += 1
       return acc
     },
@@ -86,7 +86,7 @@ const RoomBedRoom = () => {
   )
 
   const data = {
-    labels: ['Vacant', 'Occupé', 'Maintenance'],
+    labels: ['Disponible', 'Occupé', 'Maintenance'],
     datasets: [
       {
         label: 'Lit',
@@ -116,7 +116,14 @@ const RoomBedRoom = () => {
   const handleOpenModalAddError = () => setOpenModalAddError(true)
   const handleCloseModalAddError = () => setOpenModalAddError(false)
 
-  const [openAddRooms, setOpenAddRooms] = useState(false)
+  const [openAddBedRooms, setOpenAddBedRooms] = useState(false)
+  const handleCloseAddBedRoom = () => setOpenAddBedRooms(false)
+  const handleOpenAddBedRoom = () => setOpenAddBedRooms(true)
+
+  const [openMessageBedroomAdd, setOpenMessageBedRoomAdd] = useState(false)
+  const handleCloseMessageBedRoomAdd = () => setOpenMessageBedRoomAdd(false)
+  const handleOpenMessageBedRoomAdd = () => setOpenMessageBedRoomAdd(true)
+
   return (
     <Container maxWidth="xl" sx={{ flexGrow: 1, width: '100%' }}>
       <AddRooms
@@ -125,12 +132,19 @@ const RoomBedRoom = () => {
         setOpenSnack={handleOpenModalAdd}
         setOpenSnackError={handleOpenModalAddError}
       />
-      {/* <AddBedRoom handleClose={} /> */}
+      <AddBedRoom
+        handleClose={handleCloseAddBedRoom}
+        open={openAddBedRooms}
+        setOpenSnack={handleOpenMessageBedRoomAdd}
+        setOpenSnackError={handleOpenModalAddError}
+      />
       <RoomToast
         handleCloseSnackbarAdd={handleCloseModalAdd}
         openSnackbarAdd={openModalAdd}
         handleCloseSnackbarAddError={handleCloseModalAddError}
         openSnackbarAddError={openModalAddError}
+        handleCloseMessageBedRoomAdd={handleCloseMessageBedRoomAdd}
+        openMessageBedroomAdd={openMessageBedroomAdd}
       />
       <Grid container spacing={2} className={classe.HeaderGridContainer}>
         <Grid size={12} className={classe.statGridItem}>
@@ -142,7 +156,11 @@ const RoomBedRoom = () => {
               <Button variant="contained" startIcon={<FaPlusCircle />} onClick={handleOpenAddRoom}>
                 Chambres
               </Button>
-              <Button variant="contained" startIcon={<FaPlusCircle />}>
+              <Button
+                variant="contained"
+                startIcon={<FaPlusCircle />}
+                onClick={handleOpenAddBedRoom}
+              >
                 Lits
               </Button>
             </Box>

@@ -29,14 +29,23 @@ const insertRoom = async (name, type, floor, building, status, features) => {
  * @param {Number} room_id
  * @param {Number} bed_number
  * @param {String} status
- * @param {Number} assigned_patient_id
+ * @param {Number|null} assigned_patient_id
  * @returns {Promise<Object>}
  */
 const insertBedroom = async (room_id, bed_number, status, assigned_patient_id) => {
-  const query = `INSERT INTO bedrooms (room_id, bed_number, status, assigned_patient_id) VALUES (?, ?, ?, ?)`
+  let query = ''
+  let params = []
+  if (assigned_patient_id !== null) {
+    query = `INSERT INTO bedrooms (room_id, bed_number, status, assigned_patient_id) VALUES (?, ?, ?, ?)`
+    params = [room_id, bed_number, status, assigned_patient_id]
+  } else {
+    query = `INSERT INTO bedrooms (room_id, bed_number, status) VALUES (?, ?, ?)`
+    params = [room_id, bed_number, status]
+  }
+  // const query = `INSERT INTO bedrooms (room_id, bed_number, status) VALUES (?, ?, ?)`
 
   try {
-    const [result] = await database.query(query, [room_id, bed_number, status, assigned_patient_id])
+    const [result] = await database.query(query, params)
 
     if (result.affectedRows === 0) return { success: false, message: 'Failed to insert bedroom' }
 

@@ -5,7 +5,9 @@ const RoomToast = ({
   openSnackbarAdd,
   handleCloseSnackbarAdd,
   openSnackbarAddError,
-  handleCloseSnackbarAddError
+  handleCloseSnackbarAddError,
+  openMessageBedroomAdd,
+  handleCloseMessageBedRoomAdd
 }) => {
   return (
     <>
@@ -17,6 +19,20 @@ const RoomToast = ({
           sx={{ width: '100%' }}
         >
           Chambre ajouter avec succès
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openMessageBedroomAdd}
+        autoHideDuration={5000}
+        onClose={handleCloseMessageBedRoomAdd}
+      >
+        <Alert
+          onClose={handleCloseSnackbarAdd}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Lit ajouter avec succès
         </Alert>
       </Snackbar>
       <Snackbar
@@ -39,8 +55,10 @@ const RoomToast = ({
 RoomToast.propTypes = {
   openSnackbarAdd: PropTypes.bool.isRequired,
   openSnackbarAddError: PropTypes.bool.isRequired,
+  openMessageBedroomAdd: PropTypes.bool.isRequired,
   handleCloseSnackbarAdd: PropTypes.func.isRequired,
-  handleCloseSnackbarAddError: PropTypes.func.isRequired
+  handleCloseSnackbarAddError: PropTypes.func.isRequired,
+  handleCloseMessageBedRoomAdd: PropTypes.func.isRequired
 }
 
 export default RoomToast

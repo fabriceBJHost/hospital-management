@@ -170,3 +170,24 @@ export const validateInsertRoom = (formData) => {
 
   return errors
 }
+
+/**
+ * function to validate insert new bedroom
+ * @param {Object} formData
+ * @returns {Object}
+ */
+export const validateInsertBedRoom = (formData) => {
+  const errors = {}
+
+  if (!formData.room_id) {
+    errors.room_id = 'La chambre est requise'
+  }
+
+  if (!formData.bed_number) {
+    errors.bed_number = 'Le numéro du lit est requis'
+  } else if (formData.bed_number < 1) {
+    errors.bed_number = 'Le numéro du lit doit être supérieur à zéro'
+  }
+
+  return errors
+}
